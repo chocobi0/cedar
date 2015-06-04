@@ -129,6 +129,7 @@ In the dataset, we specify <code>color:orange</code>, thus the chart is orange.<
     {"name": "hoverColor", "type":["string"], "required":false, "default":"#FF00FF"},
   ],
   "template":{
+    "padding": "strict",
     "axes": [
       {
         "type": "x",
@@ -145,7 +146,6 @@ In the dataset, we specify <code>color:orange</code>, thus the chart is orange.<
         }
       }
     ],
-    "height": 300,
     "marks": [
       {
         "from": {
@@ -185,12 +185,6 @@ In the dataset, we specify <code>color:orange</code>, thus the chart is orange.<
         "type": "rect"
       }
     ],
-    "padding": {
-      "bottom": 20,
-      "left": 80,
-      "right": 10,
-      "top": 10
-    },
     "scales": [
       {
         "domain": {
@@ -210,10 +204,9 @@ In the dataset, we specify <code>color:orange</code>, thus the chart is orange.<
         "nice": true,
         "range": "height"
       }
-    ],
-    "width": 850
+    ]
   }
-}
+};
 
   //assign to chart
   chart.specification = spec;
@@ -324,7 +317,8 @@ In the dataset, we specify <code>color:orange</code>, thus the chart is orange.<
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

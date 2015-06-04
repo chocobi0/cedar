@@ -95,6 +95,24 @@
 <td>yes</td>
 <td>Id of the DOM node to render the chart into.</td>
 </tr>
+<tr>
+<td><code>renderer</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td><code>svg</code> or <code>canvas</code> (default) for drawing the chart.</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Explicit pixel width of chart. If not specified, will use width of <code>elementId</code>.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Explicit pixel height of chart. If not specified, will use height of <code>elementId</code>.</td>
+</tr>
 </tbody>
 </table>
 <h4 id="example-code">Example Code</h4>
@@ -113,7 +131,8 @@ var dataset = {
 
 //create and render a chart
 chart.show({
-  &#39;elementId&#39;: &#39;#chartDiv&#39;
+  &#39;elementId&#39;: &#39;#chartDiv&#39;,
+  &#39;renderer&#39;: &#39;canvas&#39;
 });
 
 &lt;/script&gt;</code></pre>

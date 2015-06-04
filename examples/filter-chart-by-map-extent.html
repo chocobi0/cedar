@@ -163,10 +163,17 @@
 
     var dataset = {
       &quot;url&quot;:&quot;http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It&#39;s_a_Tornado_Map/FeatureServer/0&quot;,
-      &quot;query&quot;: {},
+      &quot;query&quot;: {
+        &quot;groupByFieldsForStatistics&quot;: &quot;state&quot;,
+        &quot;outStatistics&quot;: [{
+          &quot;statisticType&quot;: &quot;sum&quot;, 
+          &quot;onStatisticField&quot;: &quot;injuries&quot;, 
+          &quot;outStatisticFieldName&quot;: &quot;injuries_SUM&quot;
+        }]
+      },  
       &quot;mappings&quot;:{
-        &quot;group&quot;: {&quot;field&quot;:&quot;state&quot;,&quot;label&quot;:&quot;State&quot;},
-        &quot;count&quot;: {&quot;field&quot;:&quot;injuries&quot;,&quot;label&quot;:&quot;Injuries&quot;}
+        &quot;x&quot;: {&quot;field&quot;:&quot;state&quot;,&quot;label&quot;:&quot;State&quot;},
+        &quot;y&quot;: {&quot;field&quot;:&quot;injuries_SUM&quot;,&quot;label&quot;:&quot;Injuries&quot;}
       }
     };
 
@@ -245,13 +252,19 @@
     
     var dataset = {
       "url":"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0",
-      "query": {},
+      "query": {
+        "groupByFieldsForStatistics": "state",
+        "outStatistics": [{
+          "statisticType": "sum", 
+          "onStatisticField": "injuries", 
+          "outStatisticFieldName": "injuries_SUM"
+        }]
+      },  
       "mappings":{
-        "group": {"field":"state","label":"State"},
-        "count": {"field":"injuries","label":"Injuries"}
+        "x": {"field":"state","label":"State"},
+        "y": {"field":"injuries_SUM","label":"Injuries"}
       }
     };
-
     var chart = new Cedar({"specification":"../../../cedar//data/templates/bar.json", "dataset": dataset});
 
     chart.override = {
@@ -343,7 +356,8 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

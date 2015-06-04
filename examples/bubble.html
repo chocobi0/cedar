@@ -81,54 +81,27 @@
 
 
 <h1>Bubble Chart</h1>
-  
+
+<div id="tooltip" class="cedar-tooltip" style="display: none"></div>
 <div id="chart"></div>
 
 
-<pre><code class="language-html">&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=utf-8 /&gt;
-  &lt;title&gt;&lt;/title&gt;
-  &lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;
-
-  &lt;!-- Load D3 --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://square.github.io/crossfilter/d3.v3.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://trifacta.github.io/vega/vega.js&quot;&gt;&lt;/script&gt;
-
-  &lt;!-- Load Cedar --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;cedar.js&quot;&gt;&lt;/script&gt;
-
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;row&quot;&gt;
-  &lt;div class=&quot;col-lg-12&quot; id=&quot;chart&quot;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-
-  var chart = new Cedar({
-    &quot;specification&quot;:&quot;../../../cedar/data/templates/bubble.json&quot;,
-    &quot;dataset&quot;:{
-      &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
-      &quot;query&quot;:{},
-      &quot;mappings&quot;:{
-        &quot;x&quot;: {&quot;field&quot;:&quot;POPULATION_ENROLLED_2008&quot;,&quot;label&quot;:&quot;Enrollment 2008&quot;},
-        &quot;y&quot;: {&quot;field&quot;:&quot;SQUARE_FOOTAGE&quot;,&quot;label&quot;:&quot;Square Footage&quot;},
-        &quot;size&quot;:{&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Number Students&quot;}
+<pre><code class="language-javascript">  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({
+    <span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/bubble.json"</span>,
+    <span class="string">"dataset"</span>:{
+      <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+      <span class="string">"query"</span>:{},
+      <span class="string">"mappings"</span>:{
+        <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"POPULATION_ENROLLED_2008"</span>,<span class="string">"label"</span>:<span class="string">"Enrollment 2008"</span>},
+        <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"SQUARE_FOOTAGE"</span>,<span class="string">"label"</span>:<span class="string">"Square Footage"</span>},
+        <span class="string">"size"</span>:{<span class="string">"field"</span>:<span class="string">"TOTAL_STUD"</span>,<span class="string">"label"</span>:<span class="string">"Number Students"</span>}
       }
     }
   });
 
   chart.show({
-    elementId: &quot;#chart&quot;,
-  });
-
-
-
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+    elementId: <span class="string">"#chart"</span>,
+  });</code></pre>
 
 
 
@@ -147,9 +120,32 @@
     }
   });
 
+  var tooltipurl = {
+    "id": "tooltip",
+    "title": "{NAME}",
+    "content": "{TOTAL_STUD} out of {CAPACITY} Students in {SQUARE_FOOTAGE} sq. ft."
+  }  
+
   chart.show({
     elementId: "#chart",
   });
+
+  chart.on('mouseout', function(event,data){
+      var cedartip = document.getElementById(tooltipurl.id);
+      cedartip.style.display = "none";
+    })
+  chart.on('mouseover', function(event,data){
+      var cedartip = document.getElementById(tooltipurl.id);
+      cedartip.style.top = event.offsetY+40 + "px";
+      cedartip.style.left = event.offsetX+30 + "px";
+      cedartip.style.display = "block";
+      var content = "<span class='title'>" + tooltipurl.title + "</span><br />";
+      content += "<p class='content'>" + tooltipurl.content + "</p>";
+
+      cedartip.innerHTML = content.replace( /\{(\w+)\}/g, function replacer(match, $1){
+        return data[$1];
+      } );
+    });  
 
 
 </script>
@@ -216,7 +212,8 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

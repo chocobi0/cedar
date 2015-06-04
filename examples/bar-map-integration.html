@@ -90,28 +90,7 @@
 
 
 
-<pre><code class="language-html">&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=utf-8 /&gt;
-  &lt;title&gt;&lt;/title&gt;
-  &lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;
-
-  &lt;!-- Load D3 --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://square.github.io/crossfilter/d3.v3.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://trifacta.github.io/vega/vega.js&quot;&gt;&lt;/script&gt;
-
-  &lt;!-- Load Cedar --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;cedar.js&quot;&gt;&lt;/script&gt;
-
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;row&quot;&gt;
-  &lt;div class=&quot;col-lg-12&quot; id=&quot;chart&quot;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-
+<pre><code class="language-html">
 
   require([&quot;esri/map&quot;, &quot;esri/layers/FeatureLayer&quot;, &quot;esri/symbols/SimpleMarkerSymbol&quot;, &quot;esri/symbols/SimpleLineSymbol&quot;,
     &quot;esri/renderers/SimpleRenderer&quot;,  &quot;esri/renderers/UniqueValueRenderer&quot;, &quot;esri/Color&quot;, &quot;dojo/domReady!&quot;], function(Map, FeatureLayer, 
@@ -142,24 +121,32 @@
     });
 
     featureLayer.setRenderer(rend);
-
     map.addLayer(featureLayer);
+
     //create a cedar chart
     var chart = new Cedar({&quot;specification&quot;:&quot;../data/templates/bar.json&quot;});
 
-    //set custom colors
     chart.override = {
       &quot;height&quot;: 400,
       &quot;marks&quot;: [{&quot;properties&quot;: {
         &quot;hover&quot;: {&quot;fill&quot;: {&quot;r&quot;: {&quot;value&quot;: 210}, &quot;g&quot;: {&quot;value&quot;: 105}, &quot;b&quot;:{&quot;value&quot;: 30}}},
         &quot;update&quot;: {&quot;fill&quot;: {&quot;value&quot;: &quot;#c15000&quot;}}}}]};
 
+
     //create the dataset w/ mappings
     var dataset = {
       &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
+      &quot;query&quot;: {
+        &quot;groupByFieldsForStatistics&quot;: &quot;ZIP_CODE&quot;,
+        &quot;outStatistics&quot;: [{
+          &quot;statisticType&quot;: &quot;sum&quot;, 
+          &quot;onStatisticField&quot;: &quot;TOTAL_STUD&quot;, 
+          &quot;outStatisticFieldName&quot;: &quot;TOTAL_STUD_SUM&quot;
+        }]
+      },       
       &quot;mappings&quot;:{
-        &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-        &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Total Students&quot;}
+        &quot;x&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
+        &quot;y&quot;: {&quot;field&quot;:&quot;TOTAL_STUD_SUM&quot;,&quot;label&quot;:&quot;Total Students&quot;}
       }
     };
 
@@ -171,16 +158,17 @@
       elementId: &quot;#chart&quot;
     });
 
+
     //CHART EVENTS
     chart.on(&#39;mouseover&#39;, onChartHover);
 
-    function onChartHover(d) {
+    function onChartHover(e,d) {
 
       //get selected value for attribute in chart marker
-      var selected = d[dataset.mappings.group.field];
+      var selected = d[dataset.mappings.x.field];
 
       //create renderer
-      var renderer = new UniqueValueRenderer(defaultSymbol, dataset.mappings.group.field);
+      var renderer = new UniqueValueRenderer(defaultSymbol, dataset.mappings.x.field);
 
       //add symbol selected value
       renderer.addValue(selected, new SimpleMarkerSymbol().setColor(new Color([210,105,30, 0.5])));
@@ -189,11 +177,13 @@
       featureLayer.refresh();
 
     } 
-  });
 
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+    //MAP EVENTS
+    featureLayer.on(&#39;mouse-over&#39;, function(d) {
+      var val = d.graphic.attributes[&quot;ZIP_CODE&quot;];
+    })
+
+  });</code></pre>
 
 
 
@@ -243,9 +233,17 @@
     //create the dataset w/ mappings
     var dataset = {
       "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
+      "query": {
+        "groupByFieldsForStatistics": "ZIP_CODE",
+        "outStatistics": [{
+          "statisticType": "sum", 
+          "onStatisticField": "TOTAL_STUD", 
+          "outStatisticFieldName": "TOTAL_STUD_SUM"
+        }]
+      },       
       "mappings":{
-        "group": {"field":"ZIP_CODE","label":"ZIP Code"},
-        "count": {"field":"TOTAL_STUD","label":"Total Students"}
+        "x": {"field":"ZIP_CODE","label":"ZIP Code"},
+        "y": {"field":"TOTAL_STUD_SUM","label":"Total Students"}
       }
     };
 
@@ -261,13 +259,13 @@
     //CHART EVENTS
     chart.on('mouseover', onChartHover);
 
-    function onChartHover(d) {
+    function onChartHover(e,d) {
       
       //get selected value for attribute in chart marker
-      var selected = d[dataset.mappings.group.field];
+      var selected = d[dataset.mappings.x.field];
       
       //create renderer
-      var renderer = new UniqueValueRenderer(defaultSymbol, dataset.mappings.group.field);
+      var renderer = new UniqueValueRenderer(defaultSymbol, dataset.mappings.x.field);
 
       //add symbol selected value
       renderer.addValue(selected, new SimpleMarkerSymbol().setColor(new Color([210,105,30, 0.5])));
@@ -348,7 +346,8 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

@@ -97,29 +97,7 @@
 
 
 
-<pre><code class="language-html">&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=utf-8 /&gt;
-  &lt;title&gt;&lt;/title&gt;
-  &lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;
-
-  &lt;!-- Load D3 --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://square.github.io/crossfilter/d3.v3.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://trifacta.github.io/vega/vega.js&quot;&gt;&lt;/script&gt;
-
-  &lt;!-- Load Cedar --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;cedar.js&quot;&gt;&lt;/script&gt;
-
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;row&quot;&gt;
-  &lt;div class=&quot;col-lg-12&quot; id=&quot;chart&quot;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-
-
+<pre><code class="language-html">
    //create a cedar chart
   var chart = new Cedar({&quot;specification&quot;:&quot;../data/templates/bar.json&quot;});
   var style = {
@@ -134,12 +112,19 @@
   //create the dataset w/ mappings
   var dataset = {
     &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
+      &quot;query&quot;: {
+        &quot;groupByFieldsForStatistics&quot;: &quot;ZIP_CODE&quot;,
+        &quot;outStatistics&quot;: [{
+          &quot;statisticType&quot;: &quot;sum&quot;, 
+          &quot;onStatisticField&quot;: &quot;TOTAL_STUD&quot;, 
+          &quot;outStatisticFieldName&quot;: &quot;TOTAL_STUD_SUM&quot;
+        }]
+      },  
     &quot;mappings&quot;:{
-      &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-      &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Total Students&quot;}
+      &quot;x&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
+      &quot;y&quot;: {&quot;field&quot;:&quot;TOTAL_STUD_SUM&quot;,&quot;label&quot;:&quot;Total Students&quot;}
     }
   };
-
   //assign to the chart
   chart.dataset = dataset;
 
@@ -173,10 +158,10 @@
   //CHART EVENTS
   chart.on(&#39;mouseover&#39;, onChartHover);
 
-  function onChartHover(d) {
+  function onChartHover(e,d) {
 
     //get selected value for attribute in chart marker
-    var selected = d[dataset.mappings.group.field];
+    var selected = d[dataset.mappings.x.field];
 
     var hoverStyle = {
       radius: 8,
@@ -188,18 +173,14 @@
     };
 
     featureLayer.setStyle(function(point) {
-      if (point.properties[dataset.mappings.group.field] === selected ) {
+      if (point.properties[dataset.mappings.x.field] === selected ) {
         return hoverStyle;
       } else {
         return geojsonMarkerOptions;
       }
     });
 
-  } 
-
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+  }</code></pre>
 
 
 
@@ -220,9 +201,17 @@
   //create the dataset w/ mappings
   var dataset = {
     "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
+      "query": {
+        "groupByFieldsForStatistics": "ZIP_CODE",
+        "outStatistics": [{
+          "statisticType": "sum", 
+          "onStatisticField": "TOTAL_STUD", 
+          "outStatisticFieldName": "TOTAL_STUD_SUM"
+        }]
+      },  
     "mappings":{
-      "group": {"field":"ZIP_CODE","label":"ZIP Code"},
-      "count": {"field":"TOTAL_STUD","label":"Total Students"}
+      "x": {"field":"ZIP_CODE","label":"ZIP Code"},
+      "y": {"field":"TOTAL_STUD_SUM","label":"Total Students"}
     }
   };
 
@@ -259,10 +248,10 @@
   //CHART EVENTS
   chart.on('mouseover', onChartHover);
 
-  function onChartHover(d) {
+  function onChartHover(e,d) {
     
     //get selected value for attribute in chart marker
-    var selected = d[dataset.mappings.group.field];
+    var selected = d[dataset.mappings.x.field];
 
     var hoverStyle = {
       radius: 8,
@@ -274,7 +263,7 @@
     };
 
     featureLayer.setStyle(function(point) {
-      if (point.properties[dataset.mappings.group.field] === selected ) {
+      if (point.properties[dataset.mappings.x.field] === selected ) {
         return hoverStyle;
       } else {
         return geojsonMarkerOptions;
@@ -347,7 +336,8 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

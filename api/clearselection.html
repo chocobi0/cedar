@@ -179,7 +179,7 @@
     //CHART EVENTS
     chart.on(&#39;mouseover&#39;, onChartHover);
 
-    function onChartHover(d) {
+    function onChartHover(e,d) {
 
       //get selected value for attribute in chart marker
       var selected = d[dataset.mappings.group.field];

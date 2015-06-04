@@ -99,7 +99,7 @@
 <td><code>fn</code></td>
 <td><code>function</code></td>
 <td>yes</td>
-<td>Function that is called when the event occurs.</td>
+<td>Function(event, data) that is called when the event occurs.</td>
 </tr>
 </tbody>
 </table>
@@ -144,7 +144,9 @@
 &lt;script&gt;
 
    //define a handler for chart events 
-  function showItem(data){
+  function showItem(event,data){
+    //dump event to console such as mouse location...
+    console.dir(event);
     //dump data to console...
     console.dir(data);
   }
@@ -161,6 +163,8 @@
 
   //attach handler (can also be done before .show())
   chart.on(&#39;click&#39;, showItem);
+
+  window.onresize = function() { chart.update() }
 
 &lt;/script&gt;</code></pre>
 

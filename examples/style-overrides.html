@@ -84,19 +84,11 @@
     <h3>Bar Chart Overrides</h3>
     <span>Common bar chart style overrides.</span>
     
-    <h5>Override default width (850px) and height (325px)</h5>
-    <pre><code>  chart.override = {
-    &quot;height&quot;: 200,
-    &quot;width&quot;: 850
-  };</code></pre>
-
-    
-    <br />
     <h5>Override default x-label title placement (i.e. to account for long labels). Default 40px.</h5>
     <pre><code>  chart.override = {
     &quot;axes&quot;: [
       {
-        &quot;titleOffset&quot;: 100
+        &quot;titleOffset&quot;: 200
       }
     ]
   };</code></pre>
@@ -133,9 +125,17 @@
   //create the dataset w/ mappings
   var dataset = {
     "url":"http://services.arcgis.com/pmcEyn9tLWCoX7Dm/arcgis/rest/services/CA_Hospitals/FeatureServer/0",
+    "query": {
+      "groupByFieldsForStatistics": "Hospital_Ownership",
+      "outStatistics": [{
+        "statisticType": "sum", 
+        "onStatisticField": "Number_of_Patients", 
+        "outStatisticFieldName": "Number_of_Patients_SUM"
+      }]
+    },        
     "mappings":{
-      "group": { "field": "Hospital_Ownership", "label": "Hospital Owndership" },
-      "count": { "field": "Number_of_Patients" }
+      "x": { "field": "Hospital_Ownership", "label": "Hospital Owndership" },
+      "y": { "field": "Number_of_Patients_SUM", "label": "Number of Patients" }
     }
   };
 
@@ -148,7 +148,7 @@
   });
 
   barChart.override = {
-    "height": 200,
+    "height": 625,
     "width": 850,
     "marks": [
       {"properties": 
@@ -160,7 +160,7 @@
     ],
     "axes": [
       {
-        "titleOffset": 100
+        "titleOffset": 200
       }
     ]
   };
@@ -229,7 +229,8 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

@@ -82,7 +82,9 @@
 <h1>Bar Chart</h1>
 
 <h3>Specification and Data from URL</h3>
-<div id="bar-url"></div>
+
+<div id="tooltip-url" class="cedar-tooltip" style="display: none"></div>
+<div id="chart-url"></div>
 
 <pre><code class="language-javascript">&lt;script&gt;
   <span class="comment">//create a cedar chart - passing a url to the spec</span>
@@ -90,19 +92,53 @@
   <span class="comment">//create the dataset w/ mappings</span>
   <span class="keyword">var</span> dataset = {
     <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+    <span class="string">"query"</span>: {
+      <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"ZIP_CODE"</span>,
+      <span class="string">"outStatistics"</span>: [{
+        <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+        <span class="string">"onStatisticField"</span>: <span class="string">"TOTAL_STUD"</span>, 
+        <span class="string">"outStatisticFieldName"</span>: <span class="string">"TOTAL_STUD_SUM"</span>
+      }]
+    },
     <span class="string">"mappings"</span>:{
       <span class="string">"sort"</span>: <span class="string">"TOTAL_STUD_SUM DESC"</span>,
-      <span class="string">"group"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
-      <span class="string">"count"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
+      <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+      <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
     }
   };
+
+  <span class="keyword">var</span> tooltipurl = {
+    <span class="string">"id"</span>: <span class="string">"tooltip-url"</span>,
+    <span class="string">"title"</span>: <span class="string">"{ZIP_CODE}"</span>,
+    <span class="string">"content"</span>: <span class="string">"{TOTAL_STUD_SUM} Students in {ZIP_CODE}"</span>
+  }
 
   <span class="comment">//assign to the chart</span>
   chart.dataset = dataset;
 
   <span class="comment">//show the chart</span>
   chart.show({
-    elementId: <span class="string">"#bar-url"</span>
+    elementId: <span class="string">"#chart-url"</span>
+  });
+
+  chart.on(<span class="string">'mouseout'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
+      <span class="keyword">var</span> cedartip = document.getElementById(tooltipurl.id);
+      cedartip.style.display = <span class="string">"none"</span>;
+    })
+  chart.on(<span class="string">'mouseover'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
+    <span class="keyword">if</span>(data === <span class="literal">undefined</span> || data === <span class="literal">null</span>) {
+      <span class="keyword">return</span>;
+    }
+    <span class="keyword">var</span> cedartip = document.getElementById(tooltipurl.id);
+    cedartip.style.top = event.offsetY + <span class="number">80</span> + <span class="string">"px"</span>;
+    cedartip.style.left = event.offsetX+<span class="number">30</span> + <span class="string">"px"</span>;
+    cedartip.style.display = <span class="string">"block"</span>;
+    <span class="keyword">var</span> content = <span class="string">"&lt;span class='title'&gt;"</span> + tooltipurl.title + <span class="string">"&lt;/span&gt;&lt;br /&gt;"</span>;
+    content += <span class="string">"&lt;p class='content'&gt;"</span> + tooltipurl.content + <span class="string">"&lt;/p&gt;"</span>;
+    content = content.replace( <span class="regexp">/\{(\w+)\}/g</span>, <span class="function"><span class="keyword">function</span> <span class="title">replacer</span><span class="params">(match, $1)</span>{</span>
+      <span class="keyword">return</span> data[$<span class="number">1</span>];
+    } );
+    document.getElementById(tooltipurl.id).innerHTML = content;
   });
 <span class="xml"><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span></code></pre>
 
@@ -113,70 +149,153 @@
   //create the dataset w/ mappings
   var dataset = {
     "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
+    "query": {
+      "groupByFieldsForStatistics": "ZIP_CODE",
+      "outStatistics": [{
+        "statisticType": "sum", 
+        "onStatisticField": "TOTAL_STUD", 
+        "outStatisticFieldName": "TOTAL_STUD_SUM"
+      }]
+    },
     "mappings":{
       "sort": "TOTAL_STUD_SUM DESC",
-      "group": {"field":"ZIP_CODE","label":"ZIP Code"},
-      "count": {"field":"TOTAL_STUD","label":"Total Students"}
+      "x": {"field":"ZIP_CODE","label":"ZIP Code"},
+      "y": {"field":"TOTAL_STUD_SUM","label":"Total Students"}
     }
   };
+
+  var tooltipurl = {
+    "id": "tooltip-url",
+    "title": "{ZIP_CODE}",
+    "content": "{TOTAL_STUD_SUM} Students in {ZIP_CODE}"
+  }
 
   //assign to the chart
   chart.dataset = dataset;
 
   //show the chart
   chart.show({
-    elementId: "#bar-url"
+    elementId: "#chart-url"
+  });
+
+  chart.on('mouseout', function(event,data){
+      var cedartip = document.getElementById(tooltipurl.id);
+      cedartip.style.display = "none";
+    })
+  chart.on('mouseover', function(event,data){
+    if(data === undefined || data === null) {
+      return;
+    }
+    var cedartip = document.getElementById(tooltipurl.id);
+    cedartip.style.top = event.offsetY + 80 + "px";
+    cedartip.style.left = event.offsetX+30 + "px";
+    cedartip.style.display = "block";
+    var content = "<span class='title'>" + tooltipurl.title + "</span><br />";
+    content += "<p class='content'>" + tooltipurl.content + "</p>";
+    content = content.replace( /\{(\w+)\}/g, function replacer(match, $1){
+      return data[$1];
+    } );
+    document.getElementById(tooltipurl.id).innerHTML = content;
   });
 </script>
 
 <h3>Inline Data</h3>
 
-<div id="bar-data"></div>
+<div id="tooltip-data" class="cedar-tooltip" style="display: none"></div>
+<div id="chart-data"></div>
 
 <pre><code class="language-javascript">&lt;script&gt;
   <span class="keyword">var</span> features = {<span class="string">"features"</span>:[{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20005</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">327</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20024</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">517</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20017</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">597</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20015</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">707</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20037</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">760</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20018</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1052</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20012</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1184</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20007</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1584</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20008</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1625</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20003</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1869</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20009</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1945</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20001</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">2164</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20010</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">2282</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20019</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">3278</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20011</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">3817</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20020</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">3901</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20032</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">4360</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20016</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">4681</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20002</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">5590</span>}}]};
 
-  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/bar.json"</span>});
+  <span class="keyword">var</span> chart2 = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/bar.json"</span>});
 
-  <span class="keyword">var</span> dataset = {
+  <span class="keyword">var</span> dataset2 = {
     <span class="string">"data"</span>: features,
     <span class="string">"mappings"</span>:{
-      <span class="string">"group"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
-      <span class="string">"count"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
+      <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+      <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
     }
   };
 
+  <span class="keyword">var</span> tooltipdata2 = {
+    <span class="string">"id"</span>: <span class="string">"tooltip-data"</span>,
+    <span class="string">"title"</span>: <span class="string">"{ZIP_CODE}"</span>,
+    <span class="string">"content"</span>: <span class="string">"{TOTAL_STUD_SUM} Students in {ZIP_CODE}"</span>
+  }
+
   <span class="comment">//assign to the chart</span>
-  chart.dataset = dataset;
+  chart2.dataset = dataset2;
 
   <span class="comment">//show the chart</span>
-  chart.show({
-    elementId: <span class="string">"#bar-data"</span>
+  chart2.show({
+    elementId: <span class="string">"#chart-data"</span>
   });
+
+  chart2.on(<span class="string">'mouseout'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
+      <span class="keyword">var</span> cedartip = document.getElementById(tooltipdata2.id);
+      cedartip.style.display = <span class="string">"none"</span>;
+    })
+  chart2.on(<span class="string">'mouseover'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
+      <span class="keyword">var</span> cedartip = document.getElementById(tooltipdata2.id);
+      cedartip.style.top = event.pageY+<span class="number">100</span> + <span class="string">"px"</span>;
+      cedartip.style.left = event.pageX+<span class="number">20</span> + <span class="string">"px"</span>;
+      cedartip.style.display = <span class="string">"block"</span>;
+      <span class="keyword">var</span> content = <span class="string">"&lt;span class='title'&gt;"</span> + tooltipdata2.title + <span class="string">"&lt;/span&gt;&lt;br /&gt;"</span>;
+      content += <span class="string">"&lt;p class='content'&gt;"</span> + tooltipdata2.content + <span class="string">"&lt;/p&gt;"</span>;
+
+      cedartip.innerHTML = content.replace( <span class="regexp">/\{(\w+)\}/g</span>, <span class="function"><span class="keyword">function</span> <span class="title">replacer</span><span class="params">(match, $1)</span>{</span>
+        <span class="keyword">return</span> data[$<span class="number">1</span>];
+      } );
+    });
 <span class="xml"><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span></code></pre>
 
 
 <script>
   var features = {"features":[{"attributes":{"ZIP_CODE":20005,"TOTAL_STUD_SUM":327}},{"attributes":{"ZIP_CODE":20024,"TOTAL_STUD_SUM":517}},{"attributes":{"ZIP_CODE":20017,"TOTAL_STUD_SUM":597}},{"attributes":{"ZIP_CODE":20015,"TOTAL_STUD_SUM":707}},{"attributes":{"ZIP_CODE":20037,"TOTAL_STUD_SUM":760}},{"attributes":{"ZIP_CODE":20018,"TOTAL_STUD_SUM":1052}},{"attributes":{"ZIP_CODE":20012,"TOTAL_STUD_SUM":1184}},{"attributes":{"ZIP_CODE":20007,"TOTAL_STUD_SUM":1584}},{"attributes":{"ZIP_CODE":20008,"TOTAL_STUD_SUM":1625}},{"attributes":{"ZIP_CODE":20003,"TOTAL_STUD_SUM":1869}},{"attributes":{"ZIP_CODE":20009,"TOTAL_STUD_SUM":1945}},{"attributes":{"ZIP_CODE":20001,"TOTAL_STUD_SUM":2164}},{"attributes":{"ZIP_CODE":20010,"TOTAL_STUD_SUM":2282}},{"attributes":{"ZIP_CODE":20019,"TOTAL_STUD_SUM":3278}},{"attributes":{"ZIP_CODE":20011,"TOTAL_STUD_SUM":3817}},{"attributes":{"ZIP_CODE":20020,"TOTAL_STUD_SUM":3901}},{"attributes":{"ZIP_CODE":20032,"TOTAL_STUD_SUM":4360}},{"attributes":{"ZIP_CODE":20016,"TOTAL_STUD_SUM":4681}},{"attributes":{"ZIP_CODE":20002,"TOTAL_STUD_SUM":5590}}]};
 
-  var chart = new Cedar({"specification":"../../../cedar/data/templates/bar.json"});
+  var chart2 = new Cedar({"specification":"../../../cedar/data/templates/bar.json"});
   
-  var dataset = {
+  var dataset2 = {
     "data": features,
     "mappings":{
-      "group": {"field":"ZIP_CODE","label":"ZIP Code"},
-      "count": {"field":"TOTAL_STUD","label":"Total Students"}
+      "x": {"field":"ZIP_CODE","label":"ZIP Code"},
+      "y": {"field":"TOTAL_STUD_SUM","label":"Total Students"}
     }
   };
 
-  //assign to the chart
-  chart.dataset = dataset;
+  var tooltipdata2 = {
+    "id": "tooltip-data",
+    "title": "{ZIP_CODE}",
+    "content": "{TOTAL_STUD_SUM} Students in {ZIP_CODE}"
+  }
 
+  //assign to the chart
+  chart2.dataset = dataset2;
+  
   //show the chart
-  chart.show({
-    elementId: "#bar-data"
+  chart2.show({
+    elementId: "#chart-data"
   });
+
+  chart2.on('mouseout', function(event,data){
+      var cedartip = document.getElementById(tooltipdata2.id);
+      cedartip.style.display = "none";
+    })
+  chart2.on('mouseover', function(event,data){
+      var cedartip = document.getElementById(tooltipdata2.id);
+      cedartip.style.top = event.pageY+100 + "px";
+      cedartip.style.left = event.pageX+20 + "px";
+      cedartip.style.display = "block";
+      var content = "<span class='title'>" + tooltipdata2.title + "</span><br />";
+      content += "<p class='content'>" + tooltipdata2.content + "</p>";
+
+      cedartip.innerHTML = content.replace( /\{(\w+)\}/g, function replacer(match, $1){
+        return data[$1];
+      } );
+    });
 </script>
+
+
   <div class="wrap">
     <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/bar-spec-url.hbs">Edit this sample on GitHub</a></p>
   </div>
@@ -240,7 +359,8 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

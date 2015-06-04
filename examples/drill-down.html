@@ -86,87 +86,6 @@
 
 <div id="chart"></div>
 
-<pre><code class="language-html">&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=utf-8 /&gt;
-  &lt;title&gt;Bar Chart&lt;/title&gt;
-  &lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;
-
-  &lt;!-- Load D3 --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://square.github.io/crossfilter/d3.v3.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://trifacta.github.io/vega/vega.js&quot;&gt;&lt;/script&gt;
-
-  &lt;!-- Load Cedar --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;cedar.js&quot;&gt;&lt;/script&gt;
-
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;row&quot;&gt;
-  &lt;div class=&quot;col-lg-12&quot; id=&quot;chart&quot;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-
-
-var chart = new Cedar({
-  &quot;specification&quot;:&quot;../../../cedar/data/templates/bar.json&quot;
-});
-
-
-var dataset = {
-  &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
-  &quot;mappings&quot;:{
-    &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-    &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Total Students&quot;},
-    &quot;sort&quot;: &quot;TOTAL_STUD_SUM DESC&quot;
-  }
-};
-
-chart.dataset = dataset;
-
-function facetChart(data){
-  var selected = data[dataset.mappings.group.field];
-
-  if(chart.dataset.mappings.group.field == &quot;ZIP_CODE&quot;) {
-    var where = dataset.mappings.group.field + &quot; = &quot; + selected;
-
-    chart.dataset.query = {&quot;where&quot;: where }
-
-    chart.dataset.mappings.group.field = &quot;FACUSE&quot;;
-  } else { 
-    var where = dataset.mappings.group.field + &quot; = &#39;&quot; + selected + &quot;&#39;&quot;;
-
-    chart.dataset.query = {&quot;where&quot;: where }
-
-    chart.dataset.mappings.group.field = &quot;ZIP_CODE&quot;;    
-  }
-  document.getElementById(&#39;filter&#39;).innerHTML = where;
-  chart.update()
-}
-
-function resetChart(){
-  document.getElementById(&#39;filter&#39;).innerHTML = &quot;no filter&quot;;
-
-  chart.dataset.mappings.group.field = &quot;ZIP_CODE&quot;;
-  chart.dataset.query = {&quot;where&quot;: &quot;1=1&quot; }
-  chart.update()
-}  
-
-
-chart.show({
-  elementId: &quot;#chart&quot;
-});
-
-chart.on(&#39;click&#39;, facetChart);
-
-
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-
-
-
 <script>
 
   var chart = new Cedar({
@@ -174,33 +93,40 @@ chart.on(&#39;click&#39;, facetChart);
   });
 
 
-  var dataset = {
-    "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
-    "mappings":{
-      "group": {"field":"ZIP_CODE","label":"ZIP Code"},
-      "count": {"field":"TOTAL_STUD","label":"Total Students"},
-      "sort": "TOTAL_STUD_SUM DESC"
-    }
-  };
+  function buildDataset(group, count) {
+    return {
+      "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
+      "query": {
+        "groupByFieldsForStatistics": group,
+        "outStatistics": [{
+          "statisticType": "sum", 
+          "onStatisticField": count, 
+          "outStatisticFieldName": count + "_SUM"
+        }]
+      }, 
+      "mappings":{
+        "x": {"field":group, "label": group},
+        "y": {"field":count + "_SUM", "label": count},
+        "sort": count + "_SUM DESC"
+      }
+    };
 
-  chart.dataset = dataset;
+  }
+  chart.dataset = buildDataset('ZIP_CODE', 'TOTAL_STUD');
 
-  function facetChart(data){
-    var selected = data[dataset.mappings.group.field];
+  function facetChart(event,data){
+    var selected = data[chart.dataset.mappings.x.field];
 
-    if(chart.dataset.mappings.group.field == "ZIP_CODE") {
-      var where = dataset.mappings.group.field + " = " + selected;
+    if(chart.dataset.mappings.x.field == "ZIP_CODE") {
+      var where = chart.dataset.mappings.x.field + " = " + selected;
 
-      chart.dataset.query = {"where": where }
-
-      chart.dataset.mappings.group.field = "FACUSE";
+      chart.dataset = buildDataset('FACUSE', 'TOTAL_STUD');
     } else { 
-      var where = dataset.mappings.group.field + " = '" + selected + "'";
+      var where = chart.dataset.mappings.x.field + " = '" + selected + "'";
 
-      chart.dataset.query = {"where": where }
-
-      chart.dataset.mappings.group.field = "ZIP_CODE";    
+      chart.dataset = buildDataset('ZIP_CODE', 'TOTAL_STUD');
     }
+    chart.dataset.query.where = where
     document.getElementById('filter').innerHTML = where;
     chart.update()
   }
@@ -208,8 +134,8 @@ chart.on(&#39;click&#39;, facetChart);
   function resetChart(){
     document.getElementById('filter').innerHTML = "no filter";
 
-    chart.dataset.mappings.group.field = "ZIP_CODE";
-    chart.dataset.query = {"where": "1=1" }
+    chart.dataset = buildDataset('ZIP_CODE', 'TOTAL_STUD');
+    chart.dataset.query.where = "1=1"
     chart.update()
   }  
 
@@ -284,7 +210,8 @@ chart.on(&#39;click&#39;, facetChart);
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>
