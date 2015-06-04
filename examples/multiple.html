@@ -23,14 +23,15 @@
   <!-- stylesheet -->
   <link rel="stylesheet" href="../../../cedar/css/style.css">
 
-  <!-- Cedar -->
-
-  <!-- esri Cedar -->
-  <script type="text/javascript" src="http://square.github.io/crossfilter/d3.v3.min.js"></script>
-  <script type="text/javascript" src="../../../cedar/js/vega.js"></script>
+  <!-- Cedar and dependencies (d3, vega) -->
+  <!-- NOTE: the pie chart examle does not work w/ latest vega (v1.5+), so here we are pulling in an oldder version (v1.4.3) -->
+  
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"></script>
+    <script type="text/javascript" src="../../../cedar/js/cedar.js"></script>
+  
+  <!-- NOTE: underscore is used by a few examples, but is not needed by Cedar -->
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript" src="../../../cedar/js/cedar-core.js"></script>
-   <!--<script type="text/javascript" src="../../../cedar/js/cedar-vega-d3.min.js"></script>-->
 
 
   <!-- Google Analytics -->
@@ -91,8 +92,39 @@
 <span id="chart1" class="chart"></span>
 <span id="chart2" class="chart"></span>
 
-<pre><code class="language-html">
-</code></pre>
+<pre><code class="language-js">
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+    <span class="string">"query"</span>: {
+      <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"CAPITALGAINS"</span>,
+      <span class="string">"outStatistics"</span>: [{
+        <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+        <span class="string">"onStatisticField"</span>: <span class="string">"CAPACITY"</span>, 
+        <span class="string">"outStatisticFieldName"</span>: <span class="string">"CAPACITY_SUM"</span>
+      }]
+    },
+    <span class="string">"mappings"</span>:{
+      <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"CAPITALGAINS"</span>,<span class="string">"label"</span>:<span class="string">"Capital Gains"</span>},
+      <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"CAPACITY_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Student Capacity"</span>},
+      <span class="string">"label"</span>: {<span class="string">"field"</span>:<span class="string">"CAPITALGAINS"</span>,<span class="string">"label"</span>:<span class="string">"Capital Gains"</span>}
+    }
+  };
+
+  <span class="keyword">var</span> chart1 = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/bar.json"</span>, <span class="string">"dataset"</span>: dataset});
+
+  chart1.show({
+    elementId: <span class="string">"#chart1"</span>,
+  });  
+
+  dataset.mappings.radius = <span class="number">180</span>;
+
+  <span class="keyword">var</span> chart2 = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/pie.json"</span>, <span class="string">"dataset"</span>: dataset});
+
+  chart2.show({
+    elementId: <span class="string">"#chart2"</span>,
+    width: <span class="number">400</span>,
+    height: <span class="number">400</span>
+  });</code></pre>
 
 
 

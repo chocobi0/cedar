@@ -8,7 +8,7 @@
   <meta charset="utf-8">
 
   
-    <title>DC 311 Requests | Esri Cedar</title>
+    <title>Responsive Time Example | Esri Cedar</title>
   
 
   
@@ -80,33 +80,80 @@
   
 
 
-<h1>Bar Chart: Specification loaded from Url</h1>
+<h1>Responsive Time Example</h1>
 
 <div id="chart"></div>
 
 
 <script>
-  //create a cedar chart - passing a url to the spec
-  var chart = new Cedar({"specification":"../../../cedar/data/templates/bar.json"});
-  //create the dataset w/ mappings
-  var dataset = {
-    "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_APPS/SR_30days_Open/MapServer/25",
-    "mappings":{
-      "group": {"field":"SERVICECODE","label":"Service Code"},
-      "count": {"field":"WARD","label":"Call Count"}
-    }
+
+
+  function drawChart() {
+    var chart = new Cedar({"specification":"../../../cedar/data/templates/time.json"});
+
+    var dataset = {
+      "url":"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0",
+      "mappings":{
+        "time": {"field":"Date"},
+        "value": {"field":"Injuries"},
+        "sort":"Date"
+
+      }
+    };
+    chart.dataset = dataset;
+    //chart.dataset.mappings.sort = "DATE";
+
+
+    var el = document.getElementById("chart");
+    var width = el.offsetWidth;
+    var height = el.offsetHeight;
+
+    chart.override = {
+      "height": height,
+      "width": width
+    };
+    chart.show({
+      elementId: "#chart",
+    });
+
+    window.chart = chart;
+
+    chart.on('mouseover', showItem);
+    chart.on('mouseout', hideItem);
+
   };
 
-  //assign to the chart
-  chart.dataset = dataset;
+  function showItem(data, item){
+    // document.getElementById('details').innerHTML = compileTemplate(data);
+    console.log('showing', data, item);
+  }
 
-  //show the chart
-  chart.show({
-    elementId: "#chart"
-  });
+  function hideItem(data){
+    // document.getElementById('details').innerHTML = "";
+    console.log('hiding', data);
+  }
+
+
+  drawChart();
+
+  // in real life you'd want to debounce this
+  // http://davidwalsh.name/javascript-debounce-function
+  window.onresize = updateChart;
+
+  function updateChart() {
+    var el = document.getElementById("chart");
+    var width = el.offsetWidth;
+
+    chart.override.width = width;
+//     chart.override = {
+//       "width": width
+//     }
+    chart.update();
+  }
+
 </script>
   <div class="wrap">
-    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/dc.hbs">Edit this sample on GitHub</a></p>
+    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/time-responsive.hbs">Edit this sample on GitHub</a></p>
   </div>
 </div>
 
@@ -168,8 +215,7 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
-      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

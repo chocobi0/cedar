@@ -8,7 +8,7 @@
   <meta charset="utf-8">
 
   
-    <title>Esri Cedar</title>
+    <title>Responsive Time Example w/ Events | Esri Cedar</title>
   
 
   
@@ -62,7 +62,7 @@
         
         <li><a href="../api/">API Documentation</a></li>
         <li><a href="../examples/">Examples</a></li>
-        <li><a href="https://github.com/esridc/cedar">Github</a></li>
+        <li><a href="https://github.com/esri/cedar">Github</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -80,128 +80,78 @@
   
 
 
-<h1>Stacked Bar Chart</h1>
+<h1>Responsive Time Example w/ Events</h1>
 
 <div id="chart"></div>
 
-
+<p>Open console window to see data as you mouse over the chart.</p>
 <script>
-  //create a cedar chart
-  var chart = new Cedar();
 
-  //create the specification
-  var spec = {
-  "inputs": [
-    {"name": "x", "type": ["numeric","string"], "required": true},
-    {"name": "y", "type": ["string"], "required": true},
-    {"name": "color", "type": ["string"], "required": true}
-  ],
-  "query": {
-    "outFields": "{x.field},{y.field},{color.field}"
-  },
-  "template":{
-    "width": 500,
-    "height": 200,
-    "padding": {"top": 10, "left": 30, "bottom": 30, "right": 10},
-    "data": [
-      {
-        "name": "table",
-        "url": "{data}",
-        "format": {
-          "property": "features"
-        }
-      },
-      {
-        "name": "stats",
-        "source": "table",
-        "transform": [
-          {"type": "facet", "keys": ["data.attributes.{x.field}"]},
-          {"type": "stats", "value": "data.attributes.{y.field}"}
-        ]
+
+  function drawChart() {
+    var chart = new Cedar({"specification":"../data/templates/time.json"});
+
+    var dataset = {
+      "url":"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0",
+      "mappings":{
+        "time": {"field":"Date"},
+        "value": {"field":"Injuries"},
+        "sort":"Date"
+
       }
-    ],
-    "scales": [
-      {
-        "name": "x",
-        "type": "ordinal",
-        "range": "width",
-        "domain": {"data": "table", "field": "data.attributes.{x.field}"}
-      },
-      {
-        "name": "y",
-        "type": "linear",
-        "range": "height",
-        "nice": true,
-        "domain": {"data": "stats", "field": "sum"}
-      },
-      {
-        "name": "color",
-        "type": "ordinal",
-        "range": "category10"
-      }
-    ],
-    "axes": [
-      {"type": "x", "scale": "x"},
-      {"type": "y", "scale": "y"}
-    ],
-    "marks": [
-      {
-        "type": "group",
-        "from": {
-          "data": "table",
-          "transform": [
-            {"type": "facet", "keys": ["data.attributes.{color.field}"]},
-            {"type": "stack", "point": "data.attributes.{x.field}", "height": "data.attributes.{y.field}"}
-          ]
-        },
-        "marks": [
-          {
-            "type": "rect",
-            "properties": {
-              "enter": {
-                "x": {"scale": "x", "field": "data.attributes.{x.field}"},
-                "width": {"scale": "x", "band": true, "offset": -1},
-                "y": {"scale": "y", "field": "y"},
-                "y2": {"scale": "y", "field": "y2"},
-                "fill": {"scale": "color", "field": "data.attributes.{color.field}"}
-              },
-              "update": {
-                "fillOpacity": {"value": 1}
-              },
-              "hover": {
-                "fillOpacity": {"value": 0.5}
-              }
-            }
-          }
-        ]
-      }    
-    ]
-  }
-}
+    };
+    chart.dataset = dataset;
+    //chart.dataset.mappings.sort = "DATE";
 
-  //assign to chart
-  chart.specification = spec;
 
-  //create the dataset w/ mappings
-  var dataset = {
-    "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
-    "mappings":{
-      "x": {"field":"ZIP_CODE","label":"ZIP Code"},
-      "y": {"field":"TOTAL_STUD","label":"Total Students"},
-      "color": {"field":"FACUSE","label":"Type of School"}
-    }
+    var el = document.getElementById("chart");
+    var width = el.offsetWidth;
+    var height = el.offsetHeight;
+
+    chart.override = {
+      "height": height,
+      "width": width
+    };
+    chart.show({
+      elementId: "#chart",
+    });
+
+    window.chart = chart;
+
+    chart.on('mouseover', showItem);
+    chart.on('mouseout', hideItem);
+
   };
 
-  //assign to the chart
-  chart.dataset = dataset;
+  function showItem(data, item){
+    // document.getElementById('details').innerHTML = compileTemplate(data);
+    console.log('showing', data, item);
+  }
 
-  //show the chart
-  chart.show({
-    elementId: "#chart"
-  });
+  function hideItem(data){
+    // document.getElementById('details').innerHTML = "";
+    console.log('hiding', data);
+  }
+
+
+  drawChart();
+
+  // in real life you'd want to debounce this
+  // http://davidwalsh.name/javascript-debounce-function
+  window.onresize = updateChart;
+
+  function updateChart() {
+    var el = document.getElementById("chart");
+    var width = el.offsetWidth;
+
+    chart.override.width = width;
+    // TODO: height?
+    chart.update();
+  }
+
 </script>
   <div class="wrap">
-    <p><a href="http://github.com/esridc/cedar/edit/master/site/source/pages/examples/stacked.hbs">Edit this sample on GitHub</a></p>
+    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/time-responsive-events.hbs">Edit this sample on GitHub</a></p>
   </div>
 </div>
 
@@ -213,7 +163,9 @@
   <nav>
     <ul>
       <li><a href="../examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../examples/scatter-def-url.html">Scatterplot</a></li>
+      <li><a href="../examples/bubble.html">Bubble Scatterplot</a></li>
       <li><a href="../examples/simple-pie.html">Pie Chart</a></li>
       <li><a href="../examples/multiple.html">Multiple Charts</a></li>
       <li><a href="../examples/time.html">Timeline</a></li>
@@ -243,6 +195,7 @@
   <nav>
     <ul>
       <li><a href="../examples/scatter-events.html">Scatter Plot Events</a></li>
+      <li><a href="../examples/drill-down.html">Drill Down</a></li>
     </ul>
   </nav>
   <h5>Map Integration</h5>

@@ -23,14 +23,37 @@
   <!-- stylesheet -->
   <link rel="stylesheet" href="../../../cedar/css/style.css">
 
-  <!-- Cedar -->
-
-  <!-- esri Cedar -->
-  <script type="text/javascript" src="http://square.github.io/crossfilter/d3.v3.min.js"></script>
-  <script type="text/javascript" src="../../../cedar/js/vega.js"></script>
+  <!-- Cedar and dependencies (d3, vega) -->
+  <!-- NOTE: the pie chart examle does not work w/ latest vega (v1.5+), so here we are pulling in an oldder version (v1.4.3) -->
+  
+    <!-- define packages for Cedar.js and dependencies (d3, Vega) for dojo loader -->
+    <script>
+      window.dojoConfig = {
+        async: true,
+        packages: [
+          {
+            name: 'd3',
+            location: 'http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5',
+            main: 'd3.min'
+          }, {
+            name: 'topojson',
+            location: 'http://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19',
+            main: 'topojson.min'
+          }, {
+            name: 'vega',
+            location: 'http://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3',
+            main: 'vega.min'
+          }, {
+            name: 'cedar',
+            location: window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/../js',
+            main: 'cedar'
+          }
+        ]
+      };
+    </script>
+  
+  <!-- NOTE: underscore is used by a few examples, but is not needed by Cedar -->
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript" src="../../../cedar/js/cedar-core.js"></script>
-   <!--<script type="text/javascript" src="../../../cedar/js/cedar-vega-d3.min.js"></script>-->
 
 
   <!-- Google Analytics -->
@@ -91,9 +114,8 @@
 
 
 <pre><code class="language-html">
-
-  require([&quot;esri/map&quot;, &quot;esri/layers/FeatureLayer&quot;, &quot;esri/symbols/SimpleMarkerSymbol&quot;, &quot;esri/symbols/SimpleLineSymbol&quot;,
-    &quot;esri/renderers/SimpleRenderer&quot;,  &quot;esri/renderers/UniqueValueRenderer&quot;, &quot;esri/Color&quot;, &quot;dojo/domReady!&quot;], function(Map, FeatureLayer, 
+  require([&quot;cedar&quot;, &quot;esri/map&quot;, &quot;esri/layers/FeatureLayer&quot;, &quot;esri/symbols/SimpleMarkerSymbol&quot;, &quot;esri/symbols/SimpleLineSymbol&quot;,
+    &quot;esri/renderers/SimpleRenderer&quot;,  &quot;esri/renderers/UniqueValueRenderer&quot;, &quot;esri/Color&quot;, &quot;dojo/domReady!&quot;], function(Cedar, Map, FeatureLayer, 
        SimpleMarkerSymbol, SimpleLineSymbol, SimpleRenderer, UniqueValueRenderer, Color) { 
 
     var defaultSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 9,
@@ -189,8 +211,8 @@
 
 <script>
 
-  require(["esri/map", "esri/layers/FeatureLayer", "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol",
-    "esri/renderers/SimpleRenderer",  "esri/renderers/UniqueValueRenderer", "esri/Color", "dojo/domReady!"], function(Map, FeatureLayer, 
+  require(["cedar", "esri/map", "esri/layers/FeatureLayer", "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol",
+    "esri/renderers/SimpleRenderer",  "esri/renderers/UniqueValueRenderer", "esri/Color", "dojo/domReady!"], function(Cedar, Map, FeatureLayer, 
        SimpleMarkerSymbol, SimpleLineSymbol, SimpleRenderer, UniqueValueRenderer, Color) { 
 
     var defaultSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 9,
