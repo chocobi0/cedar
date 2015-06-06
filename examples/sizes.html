@@ -84,7 +84,7 @@
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <style>
-    #examples { height: 1500px; }
+    #examples { height: 1800px; }
     #resizable { width: 550px; height: 150px; padding: 0.5em; }
     #resizable h3 { text-align: center; margin: 0; }
   </style>
@@ -106,12 +106,20 @@
   <h3>Code</h3>
 
 <pre><code class="language-javascript">  <span class="keyword">var</span> spec = {
-    <span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/bar.json"</span>, 
+    <span class="string">"type"</span>: <span class="string">"bar"</span>, 
     <span class="string">"dataset"</span>: {
       <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+      <span class="string">"query"</span>: {
+        <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"ZIP_CODE"</span>,
+        <span class="string">"outStatistics"</span>: [{
+          <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+          <span class="string">"onStatisticField"</span>: <span class="string">"TOTAL_STUD"</span>, 
+          <span class="string">"outStatisticFieldName"</span>: <span class="string">"TOTAL_STUD_SUM"</span>
+        }]
+      },
       <span class="string">"mappings"</span>:{
-        <span class="string">"group"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
-        <span class="string">"count"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
+        <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+        <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
       }
     }
   }
@@ -128,9 +136,8 @@
   
 </div>
 <script>
-
   var spec = {
-    "specification":"../../../cedar/data/templates/bar.json", 
+    "type": "bar", 
     "dataset": {
       "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
       "query": {
@@ -157,7 +164,6 @@
       resize: function() { chartL.update(); }
     });
   });
-
 </script>
 
   <div class="wrap">
@@ -172,7 +178,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -186,9 +192,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

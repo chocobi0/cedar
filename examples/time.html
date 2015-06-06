@@ -87,10 +87,54 @@
 
 <div id="chart"></div>
 
+<pre><code class="language-js">
+  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>:<span class="string">"time"</span>});
+
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0"</span>,
+    <span class="string">"mappings"</span>:{
+      <span class="string">"time"</span>: {<span class="string">"field"</span>:<span class="string">"Date"</span>},
+      <span class="string">"value"</span>: {<span class="string">"field"</span>:<span class="string">"Injuries"</span>},
+      <span class="string">"sort"</span>:<span class="string">"Date"</span>
+
+    }
+  };
+  <span class="keyword">var</span> tooltip = {
+    <span class="string">"title"</span>: <span class="string">"{Year}"</span>,
+    <span class="string">"content"</span>: <span class="string">"{Injuries} injuries&lt;br/&gt;{Fatalities} fatalities"</span>
+  };
+
+  chart.dataset = dataset;
+  <span class="comment">//chart.dataset.mappings.sort = "DATE";</span>
+  chart.show({
+    elementId: <span class="string">"#chart"</span>,
+  }); 
+
+  chart.on(<span class="string">'mouseover'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
+    console.log(<span class="string">"event"</span>, event);
+    console.log(<span class="string">"data"</span>, data);
+
+      <span class="keyword">var</span> cedartip = document.getElementById(<span class="string">'cedar-tooltip'</span>);
+      cedartip.style.top = event.pageY + <span class="string">"px"</span>;
+      cedartip.style.left = event.pageX + <span class="string">"px"</span>;
+      cedartip.style.display = <span class="string">"block"</span>;
+      <span class="keyword">var</span> content = <span class="string">"&lt;span class='title'&gt;"</span> + tooltip.title + <span class="string">"&lt;/span&gt;&lt;br /&gt;"</span>;
+      content += <span class="string">"&lt;p class='content'&gt;"</span> + tooltip.content + <span class="string">"&lt;/p&gt;"</span>;
+
+      cedartip.innerHTML = content.replace( <span class="regexp">/\{(\w+)\}/g</span>, <span class="function"><span class="keyword">function</span> <span class="title">replacer</span><span class="params">(match, $1)</span>{</span>
+        <span class="keyword">return</span> data[$<span class="number">1</span>];
+      } );
+    });
+  chart.on(<span class="string">'mouseout'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
+      <span class="keyword">var</span> tooltip = document.getElementById(<span class="string">'cedar-tooltip'</span>);
+      tooltip.style.top = event.pageY+<span class="number">10</span> + <span class="string">"px"</span>;
+      tooltip.style.left = event.pageX+<span class="number">10</span> + <span class="string">"px"</span>;
+      tooltip.style.display = <span class="string">"none"</span>;
+    })</code></pre>
 
 <script>
   
-  var chart = new Cedar({"specification":"../../../cedar/data/templates/time.json"});
+  var chart = new Cedar({"type":"time"});
 
   var dataset = {
     "url":"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0",
@@ -147,7 +191,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -161,9 +205,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

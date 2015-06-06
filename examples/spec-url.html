@@ -8,7 +8,7 @@
   <meta charset="utf-8">
 
   
-    <title>Responsive Time Example | Esri Cedar</title>
+    <title>Specification from URL | Esri Cedar</title>
   
 
   
@@ -23,14 +23,15 @@
   <!-- stylesheet -->
   <link rel="stylesheet" href="../../../cedar/css/style.css">
 
-  <!-- Cedar -->
-
-  <!-- esri Cedar -->
-  <script type="text/javascript" src="http://square.github.io/crossfilter/d3.v3.min.js"></script>
-  <script type="text/javascript" src="../../../cedar/js/vega.js"></script>
+  <!-- Cedar and dependencies (d3, vega) -->
+  <!-- NOTE: the pie chart examle does not work w/ latest vega (v1.5+), so here we are pulling in an oldder version (v1.4.3) -->
+  
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"></script>
+    <script type="text/javascript" src="../../../cedar/js/cedar.js"></script>
+  
+  <!-- NOTE: underscore is used by a few examples, but is not needed by Cedar -->
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
-  <script type="text/javascript" src="../../../cedar/js/cedar-core.js"></script>
-   <!--<script type="text/javascript" src="../../../cedar/js/cedar-vega-d3.min.js"></script>-->
 
 
   <!-- Google Analytics -->
@@ -80,80 +81,55 @@
   
 
 
-<h1>Responsive Time Example</h1>
+<h1>Specification from URL</h1>
+
+<p>This chart uses a specification that is not one of the standard type (bar, scatter, bubble, pie, etc.) by passing in the URL to a specification JSON file via the `specification` parameter.</p>
 
 <div id="chart"></div>
 
+<pre><code class="language-js">  <span class="comment">// NOTE: this is not one of the standard chart types</span>
+  <span class="comment">// so we pass a url to the specification JSON</span>
+  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/time-dots.json"</span>});
+
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/FEEDS/CDW_Feeds/MapServer/8"</span>,
+    <span class="string">"mappings"</span>:{
+      <span class="string">"time"</span>:   {<span class="string">"field"</span>:<span class="string">"REPORTDATETIME"</span>},
+      <span class="string">"aspect"</span>: {<span class="string">"field"</span>:<span class="string">"OFFENSE"</span>},
+      <span class="string">"facet"</span>:  {<span class="string">"field"</span>:<span class="string">"WARD"</span>},
+      <span class="string">"color"</span>:  {<span class="string">"field"</span>:<span class="string">"SHIFT"</span>}
+    }
+  };
+  chart.dataset = dataset;
+
+  chart.show({
+    <span class="string">"elementId"</span>: <span class="string">"#chart"</span>,
+  });</code></pre>
+
 
 <script>
+  // NOTE: this is not one of the standard chart types
+  // so we pass a url to the specification JSON
+  var chart = new Cedar({"specification":"../../../cedar/data/templates/time-dots.json"});
 
-
-  function drawChart() {
-    var chart = new Cedar({"specification":"../../../cedar/data/templates/time.json"});
-
-    var dataset = {
-      "url":"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0",
-      "mappings":{
-        "time": {"field":"Date"},
-        "value": {"field":"Injuries"},
-        "sort":"Date"
-
-      }
-    };
-    chart.dataset = dataset;
-    //chart.dataset.mappings.sort = "DATE";
-
-
-    var el = document.getElementById("chart");
-    var width = el.offsetWidth;
-    var height = el.offsetHeight;
-
-    chart.override = {
-      "height": height,
-      "width": width
-    };
-    chart.show({
-      elementId: "#chart",
-    });
-
-    window.chart = chart;
-
-    chart.on('mouseover', showItem);
-    chart.on('mouseout', hideItem);
-
+  var dataset = {
+    "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/FEEDS/CDW_Feeds/MapServer/8",
+    "mappings":{
+      "time":   {"field":"REPORTDATETIME"},
+      "aspect": {"field":"OFFENSE"},
+      "facet":  {"field":"WARD"},
+      "color":  {"field":"SHIFT"}
+    }
   };
+  chart.dataset = dataset;
 
-  function showItem(data, item){
-    // document.getElementById('details').innerHTML = compileTemplate(data);
-    console.log('showing', data, item);
-  }
-
-  function hideItem(data){
-    // document.getElementById('details').innerHTML = "";
-    console.log('hiding', data);
-  }
-
-
-  drawChart();
-
-  // in real life you'd want to debounce this
-  // http://davidwalsh.name/javascript-debounce-function
-  window.onresize = updateChart;
-
-  function updateChart() {
-    var el = document.getElementById("chart");
-    var width = el.offsetWidth;
-
-    chart.override.width = width;
-//     chart.override = {
-//       "width": width
-//     }
-    chart.update();
-  }
+  chart.show({
+    "elementId": "#chart",
+  });
 
 </script>
   <div class="wrap">
-    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/time-responsive.hbs">Edit this sample on GitHub</a></p>
+    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/spec-url.hbs">Edit this sample on GitHub</a></p>
   </div>
 </div>
 
@@ -164,7 +140,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -178,9 +154,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>
@@ -215,7 +191,8 @@
   <nav>
     <ul>
       <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Pass Data</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
       <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>

@@ -21,28 +21,26 @@
   <![endif]-->
 
   <!-- stylesheet -->
-  <link rel="stylesheet" href="../../../cedar/css/style.css">
+  <link rel="stylesheet" href="../css/style.css">
 
-  <!-- Cedar and dependencies (d3, vega) -->
-  <!-- NOTE: the pie chart examle does not work w/ latest vega (v1.5+), so here we are pulling in an oldder version (v1.4.3) -->
-  
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"></script>
-    <script type="text/javascript" src="../../../cedar/js/cedar.js"></script>
-  
-  <!-- NOTE: underscore is used by a few examples, but is not needed by Cedar -->
+  <!-- Cedar -->
+
+  <!-- esri Cedar -->
+  <script type="text/javascript" src="http://square.github.io/crossfilter/d3.v3.min.js"></script>
+  <script type="text/javascript" src="http://trifacta.github.io/vega/vega.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+  <script type="text/javascript" src="../js/cedar-core.js"></script>
 
 
   <!-- Google Analytics -->
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    // (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    // (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    // m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    // })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-47337822-8', 'auto');
-    ga('send', 'pageview');
+    // ga('create', 'UA-44963317-3', 'auto');
+    // ga('send', 'pageview');
   </script>
   <!-- End Google Analytics -->
 </head>
@@ -54,16 +52,18 @@
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../../../cedar/">cedar.js</a>
+      <a class="navbar-brand" href="../">cedar.js</a>
     </div>
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         
-        <li><a href="../../../cedar/api/">API Documentation</a></li>
-        <li><a href="../../../cedar/examples/">Examples</a></li>
-        <li><a href="https://github.com/esri/cedar">Github</a></li>
+        <li><a href="../examples/">Examples</a></li>
+        <li><a href="../api-reference/">Api Documentation</a></li>
+        <li><a href="https://github.com/esridc/cedar">Github</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -96,9 +96,9 @@
   &lt;title&gt;&lt;/title&gt;
   &lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;
 
-  &lt;!-- Load D3 and vega --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js&quot;&gt;&lt;/script&gt;
+  &lt;!-- Load D3 --&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;http://square.github.io/crossfilter/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;http://trifacta.github.io/vega/vega.js&quot;&gt;&lt;/script&gt;
 
   &lt;!-- Load Cedar --&gt;
   &lt;script type=&quot;text/javascript&quot; src=&quot;cedar.js&quot;&gt;&lt;/script&gt;
@@ -111,6 +111,8 @@
 &lt;/div&gt;
 
 &lt;script&gt;
+
+
 
   //create a cedar chart, passing a url to a spec
   var chart = new Cedar({&quot;specification&quot;:&quot;../data/templates/pie.json&quot;});
@@ -137,6 +139,7 @@
     elementId: &quot;#chart&quot;
   });
 
+
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
@@ -145,7 +148,7 @@
 
 <script>
   //create a cedar chart - passing a url to the spec
-  var chart = new Cedar({"specification":"../../../cedar/data/templates/pie.json"});
+  var chart = new Cedar({"specification":"../data/templates/pie.json"});
   //create the dataset w/ mappings
   var dataset = {
     "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
@@ -175,71 +178,42 @@
   });
 </script>
   <div class="wrap">
-    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/pie-spec-override.hbs">Edit this sample on GitHub</a></p>
+    <p><a href="http://github.com/esridc/cedar/edit/master/site/source/pages/examples/bar-spec-override.hbs">Edit this sample on GitHub</a></p>
   </div>
 </div>
 
 <div class="col-lg-2">
   <aside class="sidebar">
 
-
-  <h5>Chart Types</h5>
-  <nav>
-    <ul>
-      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
-      <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
-      <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
-      <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
-      <li><a href="../../../cedar/examples/simple-pie.html">Pie Chart</a></li>
-      <li><a href="../../../cedar/examples/multiple.html">Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/time.html">Timeline</a></li>
-      <li><a href="../../../cedar/examples/time-dots.html">Time facets</a></li>
-    </ul>
-  </nav>
-
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
-      <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
+      <li><a href="../examples/bar-spec-url.html">Load From URL</a></li>
+      <li><a href="../examples/bar-spec-inlined.html">Inline Spec</a></li>
+      <li><a href="../examples/bar-spec-override.html">With Style Overrides</a></li>
     </ul>
   </nav>
 
-<!--  <h5>Using Definitions</h5>
+  <h5>Using Definitions</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/scatter-def-url.html">Load from URL</a></li>
+      <li><a href="../examples/scatter-def-url.html">Load from URL</a></li>
       <li>In-lined</li>
     </ul>
   </nav>
-  -->
+  
   <h5>Events</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/scatter-events.html">Scatter Plot Events</a></li>
-      <li><a href="../../../cedar/examples/drill-down.html">Drill Down</a></li>
+      <li><a href="../examples/scatter-events.html">Scatter Plot Events</a></li>
     </ul>
   </nav>
   <h5>Map Integration</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-map-integration.html">With JS API Map</a></li>
-      <li><a href="../../../cedar/examples/bar-map-leaflet-integration.html">With Leaflet Map</a></li>
-      <li><a href="../../../cedar/examples/filter-chart-by-map-extent.html">Filter by Geometry</a></li>
-      <li><a href="../../../cedar/examples/filter-chart-by-bbox.html">Filter by BBOX</a></li>
-      <li><a href="../../../cedar/examples/map-to-chart-interaction.html">Map to Chart Interaction</a></li>
-    </ul>
-  </nav>
-
-  <h5>Additional Examples</h5>
-  <nav>
-    <ul>
-      <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
-      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
-      <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
+      <li><a href="../examples/bar-map-integration.html">Link to JS API Map</a></li>
+      <li><a href="../examples/bar-map-leaflet-integration.html">Link to Leaflet Map</a></li>
+      <li>Link to pop-over</li>
     </ul>
   </nav>
 
@@ -255,6 +229,6 @@
 </div>
 
   </div>
-  <!-- <script src="../../../cedar/js/script.js"></script>-->
+  <!-- <script src="../js/script.js"></script>-->
   </body>
 </html>

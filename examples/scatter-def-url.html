@@ -86,21 +86,23 @@
 <div id="chart"></div>
 
 
-<pre><code class="language-html">  var chart = new Cedar({
-    &quot;specification&quot;:&quot;../../../cedar/data/templates/scatter.json&quot;,
-    &quot;dataset&quot;:{
-      &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
-      &quot;query&quot;:{},
-      &quot;mappings&quot;:{
-        &quot;x&quot;: {&quot;field&quot;:&quot;POPULATION_ENROLLED_2008&quot;,&quot;label&quot;:&quot;Enrolment 2008&quot;},
-        &quot;y&quot;: {&quot;field&quot;:&quot;SQUARE_FOOTAGE&quot;,&quot;label&quot;:&quot;Square Footage&quot;},
-        &quot;color&quot;:{&quot;field&quot;:&quot;FACUSE&quot;,&quot;label&quot;:&quot;Facility Type&quot;}
+<pre><code class="language-js">  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({
+    <span class="string">"type"</span>:<span class="string">"scatter"</span>,
+    <span class="string">"dataset"</span>:{
+      <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+      <span class="string">"query"</span>:{},
+      <span class="string">"mappings"</span>:{
+        <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"POPULATION_ENROLLED_2008"</span>,<span class="string">"label"</span>:<span class="string">"Enrolment 2008"</span>},
+        <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"SQUARE_FOOTAGE"</span>,<span class="string">"label"</span>:<span class="string">"Square Footage"</span>},
+        <span class="string">"color"</span>:{<span class="string">"field"</span>:<span class="string">"FACUSE"</span>,<span class="string">"label"</span>:<span class="string">"Facility Type"</span>}
       }
     }
   });
 
   chart.show({
-    elementId: &quot;#chart&quot;,
+    elementId: <span class="string">"#chart"</span>,
+    width: <span class="number">800</span>,
+    height: <span class="number">400</span>
   });</code></pre>
 
 
@@ -108,7 +110,7 @@
 
 <script>
   var chart = new Cedar({
-    "specification":"../../../cedar/data/templates/scatter.json",
+    "type":"scatter",
     "dataset":{
       "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
       "query":{},
@@ -125,8 +127,6 @@
     width: 800,
     height: 400
   });
-
-
 </script>
   <div class="wrap">
     <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/scatter-def-url.hbs">Edit this sample on GitHub</a></p>
@@ -140,7 +140,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -154,9 +154,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

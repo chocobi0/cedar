@@ -109,28 +109,51 @@
 <td>no</td>
 <td><a href="../../../cedar/api/json/dataset-json.html">dataset</a> object.</td>
 </tr>
+<tr>
+<td><code>type</code></td>
+<td>&lt;<code>string</code>&gt;</td>
+<td>no</td>
+<td>Shorthand for specifying a URL to a Cedar <a href="../../../cedar/api/json/specification-json.html">specification</a>. Can be one of the pre-defined types (&#39;bar&#39;, &#39;bar-horizontal&#39;, &#39;bubble&#39;, &#39;pie&#39;, &#39;scatter&#39;, &#39;time&#39;) or a URL to a secificatin JSON file.</td>
+</tr>
+<tr>
+<td><code>baseUrl</code></td>
+<td>&lt;<code>string</code>&gt;</td>
+<td>no</td>
+<td>The URL of the folder which contains the Cedar script file (cedar.js or cedar.min.js).*</td>
+</tr>
 </tbody>
 </table>
 <h3 id="examples">Examples</h3>
-<pre><code class="language-json">var chart = new Cedar({&quot;specification&quot;:&quot;../../../cedar/data/templates/bar.json&quot;});
+<pre><code class="language-js">  <span class="comment">//create a cedar chart using the known 'bar' type</span>
+  <span class="comment">// this is the same as passing {"specification": "path/to/cedar/charts/bar.json"}</span>
+  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>: <span class="string">"bar"</span>});
 
-//create the dataset w/ mappings
-var dataset = {
-  &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
-  &quot;mappings&quot;:{
-    &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-    &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Total Students&quot;}
-  }
-};
+  <span class="comment">//create the dataset w/ mappings</span>
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+    <span class="string">"query"</span>: {
+      <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"ZIP_CODE"</span>,
+      <span class="string">"outStatistics"</span>: [{
+        <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+        <span class="string">"onStatisticField"</span>: <span class="string">"TOTAL_STUD"</span>, 
+        <span class="string">"outStatisticFieldName"</span>: <span class="string">"TOTAL_STUD_SUM"</span>
+      }]
+    },
+    <span class="string">"mappings"</span>:{
+      <span class="string">"sort"</span>: <span class="string">"TOTAL_STUD_SUM DESC"</span>,
+      <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+      <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
+    }
+  };
 
-//assign to the chart
-chart.dataset = dataset;
+  <span class="comment">//assign to the chart</span>
+  chart.dataset = dataset;
 
-
-// make the chart visible by attaching it to a DOM node
-chart.show({
-  elementId: &quot;#chart&quot;
-});</code></pre>
+  <span class="comment">//show the chart</span>
+  chart.show({
+    elementId: <span class="string">"#chart"</span>
+  });</code></pre>
+<p>*&nbsp;You should not need to set the <code>baseUrl</code> unless you are using Internet Explorer, which is not able to determine this location automatically, and defaults to using <a href="http://esri.github.io/cedar/js">http://esri.github.io/cedar/js</a> as the <code>baseUrl</code> when loading chart pre-defined chart specification JSON files. To prevent this behavior in Internet Explorer, set this to the same URL of the folder where you loaded the Cedar script (cedar.js or cedar.min.js). Example: <code>baseUrl:</code>./js`</p>
 
   <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/api/create.hbs">Edit this page on GitHub</a></p>
 </div>

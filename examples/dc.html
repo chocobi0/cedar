@@ -8,7 +8,7 @@
   <meta charset="utf-8">
 
   
-    <title>Esri Cedar</title>
+    <title>DC 311 Requests | Esri Cedar</title>
   
 
   
@@ -81,100 +81,33 @@
   
 
 
-<h1>Bubble Chart</h1>
+<h1>Bar Chart: Specification loaded from Url</h1>
 
-<div id="tooltip" class="cedar-tooltip" style="display: none"></div>
 <div id="chart"></div>
 
 
-<pre><code class="language-javascript">  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({
-    <span class="string">"type"</span>:<span class="string">"bubble"</span>,
-    <span class="string">"dataset"</span>:{
-      <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
-      <span class="string">"query"</span>:{},
-      <span class="string">"mappings"</span>:{
-        <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"SQUARE_FOOTAGE"</span>,<span class="string">"label"</span>:<span class="string">"Square Footage"</span>},
-        <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"CAPACITY"</span>,<span class="string">"label"</span>:<span class="string">"Capacity"</span>},
-        <span class="string">"size"</span>:{<span class="string">"field"</span>:<span class="string">"TOTAL_STUD"</span>,<span class="string">"label"</span>:<span class="string">"Number of Students"</span>}
-      }
-    }
-  });
-
-  <span class="keyword">var</span> tooltipurl = {
-    <span class="string">"id"</span>: <span class="string">"tooltip"</span>,
-    <span class="string">"title"</span>: <span class="string">"{NAME}"</span>,
-    <span class="string">"content"</span>: <span class="string">"{TOTAL_STUD} out of {CAPACITY} Students in {SQUARE_FOOTAGE} sq. ft."</span>
-  }  
-
-  chart.show({
-    elementId: <span class="string">"#chart"</span>,
-  });
-
-  chart.on(<span class="string">'mouseout'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
-      <span class="keyword">var</span> cedartip = document.getElementById(tooltipurl.id);
-      cedartip.style.display = <span class="string">"none"</span>;
-    })
-  chart.on(<span class="string">'mouseover'</span>, <span class="function"><span class="keyword">function</span><span class="params">(event,data)</span>{</span>
-      <span class="keyword">var</span> cedartip = document.getElementById(tooltipurl.id);
-      cedartip.style.top = event.offsetY+<span class="number">40</span> + <span class="string">"px"</span>;
-      cedartip.style.left = event.offsetX+<span class="number">30</span> + <span class="string">"px"</span>;
-      cedartip.style.display = <span class="string">"block"</span>;
-      <span class="keyword">var</span> content = <span class="string">"&lt;span class='title'&gt;"</span> + tooltipurl.title + <span class="string">"&lt;/span&gt;&lt;br /&gt;"</span>;
-      content += <span class="string">"&lt;p class='content'&gt;"</span> + tooltipurl.content + <span class="string">"&lt;/p&gt;"</span>;
-
-      cedartip.innerHTML = content.replace( <span class="regexp">/\{(\w+)\}/g</span>, <span class="function"><span class="keyword">function</span> <span class="title">replacer</span><span class="params">(match, $1)</span>{</span>
-        <span class="keyword">return</span> data[$<span class="number">1</span>];
-      } );
-    });</code></pre>
-
-
-
-
 <script>
-  var chart = new Cedar({
-    "type":"bubble",
-    "dataset":{
-      "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
-      "query":{},
-      "mappings":{
-        "x": {"field":"SQUARE_FOOTAGE","label":"Square Footage"},
-        "y": {"field":"CAPACITY","label":"Capacity"},
-        "size":{"field":"TOTAL_STUD","label":"Number of Students"}
-      }
+  //create a cedar chart - passing a url to the spec
+  var chart = new Cedar({"specification":"../../../cedar/data/templates/bar.json"});
+  //create the dataset w/ mappings
+  var dataset = {
+    "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_APPS/SR_30days_Open/MapServer/25",
+    "mappings":{
+      "group": {"field":"SERVICECODE","label":"Service Code"},
+      "count": {"field":"WARD","label":"Call Count"}
     }
-  });
+  };
 
-  var tooltipurl = {
-    "id": "tooltip",
-    "title": "{NAME}",
-    "content": "{TOTAL_STUD} out of {CAPACITY} Students in {SQUARE_FOOTAGE} sq. ft."
-  }  
+  //assign to the chart
+  chart.dataset = dataset;
 
+  //show the chart
   chart.show({
-    elementId: "#chart",
+    elementId: "#chart"
   });
-
-  chart.on('mouseout', function(event,data){
-      var cedartip = document.getElementById(tooltipurl.id);
-      cedartip.style.display = "none";
-    })
-  chart.on('mouseover', function(event,data){
-      var cedartip = document.getElementById(tooltipurl.id);
-      cedartip.style.top = event.offsetY+40 + "px";
-      cedartip.style.left = event.offsetX+30 + "px";
-      cedartip.style.display = "block";
-      var content = "<span class='title'>" + tooltipurl.title + "</span><br />";
-      content += "<p class='content'>" + tooltipurl.content + "</p>";
-
-      cedartip.innerHTML = content.replace( /\{(\w+)\}/g, function replacer(match, $1){
-        return data[$1];
-      } );
-    });  
-
-
 </script>
   <div class="wrap">
-    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/bubble.hbs">Edit this sample on GitHub</a></p>
+    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/dc.hbs">Edit this sample on GitHub</a></p>
   </div>
 </div>
 

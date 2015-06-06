@@ -17054,27 +17054,6 @@ vg.headless.View.Factory = function(defs) {
 } (function (vg, d3) {
   'use strict';
 
-  // get cedar root URL for loading chart specs
-  var baseUrl = (function() {
-    var cdnProtocol = 'http:';
-    var cdnUrl = '//esri.github.io/cedar/js';
-    var src;
-    if (window && window.document) {
-      src = (window.document.currentScript && window.document.currentScript.src);
-      if (src) {
-        // real browser, get base url from current script
-        return src.substr(0, src.lastIndexOf('/'));
-      } else {
-        // ie, set base url to CDN
-        // NOTE: could fallback to CDN only if can't find any scripts named cedar 
-        return (window.document.location ? window.document.location.protocol : cdnProtocol) + cdnUrl;
-      }
-    } else {
-      // node, set base url to CDN
-      return cdnProtocol + cdnUrl;
-    }
-  })();
-
 /**
  * Constructor
  * @param {object} options Cedar options
@@ -17086,15 +17065,10 @@ var Cedar = function Cedar(options){
   //ensure an opts object
   var opts = options || {};
 
-  var spec;
-
   /**
    * Internals for holding state
    */
-
-  // Cedar configuration such as size
-  this.width = undefined;
-  this.height = undefined;
+  
 
   // Array to hold event handlers
   this._events = [];
@@ -17108,11 +17082,6 @@ var Cedar = function Cedar(options){
   //queue to hold methods called while
   //xhrs are in progress
   this._methodQueue=[];
-
-  // override base URL 
-  if (opts.baseUrl) {
-    this.baseUrl = opts.baseUrl;
-  }
 
   /**
    * Flag used to determine if the library is
@@ -17143,32 +17112,23 @@ var Cedar = function Cedar(options){
     this._definition.override = opts.override;
   }
 
-  // specification
-
-  // first, check for pre-defined chart type passed as "type"
-  spec = this._getSpecificationUrl(opts.type);
-
-  // if url or object passed used that
+  //template
   if(opts.specification){
-    spec = opts.specification;
-  }
-
-  if (spec) {
     //is it an object or string(assumed to be url)
-    if(typeof spec === 'object'){
+    if(typeof opts.specification === 'object'){
       //hold onto the template
-      this._definition.specification = spec;
+      this._definition.specification = opts.specification;
 
-    }else if(typeof spec === 'string' ){ 
+    }else if(typeof opts.specification === 'string' ){ 
       //assume it's a url (relative or abs) and fetch the template object
       this._pendingXhr = true;
-      Cedar.getJson(spec, function(err,data){
+      Cedar.getJson(opts.specification, function(err,data){
         self._pendingXhr = false;
         self._definition.specification = data; 
         self._purgeMethodQueue();
       });
     }else{
-      throw new Error('parameter specification must be an object or string (url)');
+      throw new Error('parameter template must be an object or string (url)');
     }
   }
 
@@ -17222,11 +17182,6 @@ var Cedar = function Cedar(options){
 
 };
 
-// base URL of this library
-Cedar.prototype.baseUrl = baseUrl;
-
-// default pre-defined chart types
-Cedar.prototype.chartTypes = ['bar', 'bar-horizontal', 'bubble', 'pie', 'scatter', 'time'];
 
 /**
  * Inspect the current state of the object
@@ -17275,8 +17230,6 @@ Cedar.prototype.show = function(options){
     //hold onto the id
     this._elementId = options.elementId;
     this._renderer = options.renderer || "canvas"; //default to canvas
-    this.width = options.width || undefined; // if not set in API, always base on current div size
-    this.height = options.height || undefined;
 
     //hold onto the token
     if(options.token){
@@ -17394,11 +17347,8 @@ Cedar.prototype._renderSpec = function(spec){
       });
 
       
-      var width = self.width || parseInt(d3.select(self._elementId).style('width')) || 500;
-      var height = self.height || parseInt(d3.select(self._elementId).style('height')) || 500;
-
       //render into the element
-      self._view.width(width).height(height).update(); 
+      self._view.update(); 
 
       //attach event proxies
       self._attach(self._view);
@@ -17423,7 +17373,7 @@ Cedar.prototype.select = function( opt ) {
   var items = view.model().scene().items[0].items[0].items;
 
   items.forEach(function(item) {
-    if ( item.datum.data.attributes[opt.key] === opt.value ) {
+    if ( item.datum.attributes[opt.key] === opt.value ) {
       if ( item.hasPropertySet("hover") ) {
         self._view.update({props:"hover", items:item});
       }
@@ -17443,7 +17393,7 @@ Cedar.prototype.clearSelection = function( opt ) {
 
   if ( opt && opt.key ) {
     items.forEach(function(item) {
-      if ( item.datum.data.attributes[opt.key] === opt.value ) {
+      if ( item.datum.attributes[opt.key] === opt.value ) {
         self._view.update({props:"update", items:item});
       }
     });
@@ -17457,7 +17407,7 @@ Cedar.prototype.clearSelection = function( opt ) {
 
 // trigger callback 
 Cedar.prototype.emit = function(eventName) {
-  if (this._view._handler._handlers[ eventName ] && this._view._handler._handlers[ eventName ][0] !== undefined){
+  if (this._view._handler._handlers[ eventName ]){
     this._view._handler._handlers[ eventName ][0].handler();
   }
 };
@@ -17572,15 +17522,7 @@ Cedar._defaultQuery = function(){
   return defaultQuery;
 };
 
-/**
- * Get pre-defined spec url
- */
-Cedar.prototype._getSpecificationUrl = function(spec){
-  if (this.chartTypes.indexOf(spec) !== -1) {
-    spec = this.baseUrl + '/charts/' + this.chartTypes[this.chartTypes.indexOf(spec)] + '.json';
-  }
-  return spec;
-};
+
 
 /**
  * Generic event handler proxy
@@ -17594,7 +17536,7 @@ Cedar.prototype._handler = function(evtName) {
       if(registeredHandler.type === evtName){
         //invoke the callback with the data
         if ( item ) {
-          registeredHandler.callback(evt, item.datum.data.attributes);
+          registeredHandler.callback(evt, item.datum.attributes);
         } else {
           registeredHandler.callback(evt,null);
         }
@@ -17659,8 +17601,6 @@ Cedar.getJson = function( url, callback ){
 
 
 Cedar._mixin = function(source) {
-    /*jshint loopfunc: true*/
-    // TODO: prob should replace w/ forEach()
     for (var i = 1; i < arguments.length; i++) {
         d3.entries(arguments[i]).forEach(function(p) {
             source[p.key] = p.value;
@@ -17849,4 +17789,4 @@ Cedar._serializeQueryParams = function(params) {
   return Cedar;
 }));
 
-//# sourceMappingURL=cedar-vega-d3.js.map
+//# sourceMappingURL=cedar-vega2-d3.js.map

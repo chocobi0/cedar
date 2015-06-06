@@ -86,72 +86,44 @@
 <div id="chart"></div>
 
 
-<pre><code class="language-html">&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=utf-8 /&gt;
-  &lt;title&gt;&lt;/title&gt;
-  &lt;meta name=&#39;viewport&#39; content=&#39;initial-scale=1,maximum-scale=1,user-scalable=no&#39; /&gt;
+<pre><code class="language-js">  <span class="comment">//create a cedar chart</span>
+  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>: <span class="string">"bar-horizontal"</span>});
 
-  &lt;!-- Load D3 and vega --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;http://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js&quot;&gt;&lt;/script&gt;
-
-  &lt;!-- Load Cedar --&gt;
-  &lt;script type=&quot;text/javascript&quot; src=&quot;cedar.js&quot;&gt;&lt;/script&gt;
-
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;row&quot;&gt;
-  &lt;div class=&quot;col-lg-12&quot; id=&quot;chart&quot;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-
-  //create a cedar chart
-  var chart = new Cedar({&quot;specification&quot;:&quot;../../../cedar/data/templates/horizontal.json&quot;});
-
-  //create the dataset w/ mappings
-  var dataset = {
-    &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
-    &quot;mappings&quot;:{
-      &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-      &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Total Students&quot;}
+  <span class="comment">//create the dataset w/ mappings</span>
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+    <span class="string">"mappings"</span>:{
+      <span class="string">"group"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+      <span class="string">"count"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
     }
   };
 
-  //assign to the chart
+  <span class="comment">//assign to the chart</span>
   chart.dataset = dataset;
 
-  // fix placement of axes labels
+  <span class="comment">// fix placement of axes labels</span>
   chart.override = {
-    &quot;axes&quot;: [
+    <span class="string">"axes"</span>: [
       { 
-        &quot;titleOffset&quot;: 25,
-        &quot;title&quot;: &quot;Total Number of Students&quot; 
+        <span class="string">"titleOffset"</span>: <span class="number">25</span>,
+        <span class="string">"title"</span>: <span class="string">"Total Number of Students"</span> 
       },
       { 
-        &quot;titleOffset&quot;: 50 
+        <span class="string">"titleOffset"</span>: <span class="number">50</span> 
       }
     ]
   };
 
-  //show the chart
+  <span class="comment">//show the chart</span>
   chart.show({
-    elementId: &quot;#chart&quot;
-  });
-
-
-
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+    elementId: <span class="string">"#chart"</span>
+  });</code></pre>
 
 
 
 <script>
   //create a cedar chart
-  var chart = new Cedar({"specification":"../../../cedar/data/templates/horizontal.json"});
+  var chart = new Cedar({"type": "bar-horizontal"});
 
   //create the dataset w/ mappings
   var dataset = {
@@ -195,7 +167,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -209,9 +181,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

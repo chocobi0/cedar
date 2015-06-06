@@ -84,11 +84,77 @@
 <h1>Responsive Bar Chart</h1>
 
 <div id="chart"></div>
+<pre><code class="language-javascript">  <span class="function"><span class="keyword">function</span> <span class="title">drawChart</span><span class="params">()</span> {</span>
+    <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>:<span class="string">"bar"</span>});
+
+    <span class="comment">//create the dataset w/ mappings</span>
+    <span class="keyword">var</span> dataset = {
+      <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+      <span class="string">"query"</span>: {
+        <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"ZIP_CODE"</span>,
+        <span class="string">"outStatistics"</span>: [{
+          <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+          <span class="string">"onStatisticField"</span>: <span class="string">"TOTAL_STUD"</span>, 
+          <span class="string">"outStatisticFieldName"</span>: <span class="string">"TOTAL_STUD_SUM"</span>
+        }]
+      },
+      <span class="string">"mappings"</span>:{
+        <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+        <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
+      }
+    };
+
+    <span class="comment">//assign to the chart</span>
+    chart.dataset = dataset;
+
+    <span class="comment">//show the chart</span>
+    chart.show({
+      elementId: <span class="string">"#chart"</span>
+    });
+
+    window.chart = chart;
+  };
+
+
+  drawChart();
+
+  window.onresize = updateChart;
+
+  <span class="function"><span class="keyword">function</span> <span class="title">updateChart</span><span class="params">()</span> {</span>
+    <span class="keyword">var</span> el = document.getElementById(<span class="string">"chart"</span>);
+    <span class="keyword">var</span> width = el.offsetWidth;
+
+    <span class="keyword">var</span> labels;
+    <span class="keyword">if</span>(width &lt;= <span class="number">200</span>) {
+      labels = {
+        <span class="string">"fontSize"</span>: {<span class="string">"value"</span>: <span class="number">0</span>},
+      }
+    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">200</span> &lt; width &amp;&amp; width &lt;= <span class="number">600</span>) {
+      labels = {
+        <span class="string">"angle"</span>: {<span class="string">"value"</span>: <span class="number">50</span>},
+        <span class="string">"align"</span>: {<span class="string">"value"</span>: <span class="string">"left"</span>},
+        <span class="string">"baseline"</span>: {<span class="string">"value"</span>: <span class="string">"middle"</span>}
+      }
+    } <span class="keyword">else</span> {
+      labels = {
+        <span class="string">"angle"</span>: {<span class="string">"value"</span>: <span class="number">0</span>},
+        <span class="string">"align"</span>: {<span class="string">"value"</span>: <span class="string">"center"</span>},
+        <span class="string">"baseline"</span>: {<span class="string">"value"</span>: <span class="string">"middle"</span>}
+      }
+    }
+
+    chart.override = {
+      <span class="string">"axes"</span>: [{<span class="string">"properties"</span>: {
+        <span class="string">"labels"</span>: labels
+      }}]
+    }
+
+    chart.update();
+  }</code></pre>
 
 <script>
   function drawChart() {
-    //create a cedar chart - passing a url to the spec
-    var chart = new Cedar({"specification":"../../../cedar/data/templates/bar.json"});
+    var chart = new Cedar({"type":"bar"});
 
     //create the dataset w/ mappings
     var dataset = {
@@ -167,7 +233,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -181,9 +247,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

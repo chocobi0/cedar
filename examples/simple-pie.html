@@ -87,33 +87,37 @@
 
 
 
-<pre><code class="language-html">  var chart = new Cedar({&quot;specification&quot;:&quot;../../../cedar/data/templates/pie.json&quot;});
-  //create the dataset w/ mappings
-  var dataset = {
-    &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
-    &quot;mappings&quot;:{
-      &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-      &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Total Students&quot;},
-      &quot;radius&quot;: 270
+<pre><code class="language-js">  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>:<span class="string">"pie"</span>});
+
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+    <span class="string">"query"</span>: {
+      <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"ZIP_CODE"</span>,
+      <span class="string">"outStatistics"</span>: [{
+        <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+        <span class="string">"onStatisticField"</span>: <span class="string">"TOTAL_STUD"</span>, 
+        <span class="string">"outStatisticFieldName"</span>: <span class="string">"TOTAL_STUD_SUM"</span>
+      }]
+    },    
+    <span class="string">"mappings"</span>:{
+      <span class="string">"label"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+      <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>},
+      <span class="string">"radius"</span>: <span class="number">270</span>
     }
   };
   chart.dataset = dataset;
 
   chart.show({
-    elementId: &quot;#chart&quot;,
-    width: 600,
-    height: 600
-  });  
-
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+    elementId: <span class="string">"#chart"</span>,
+    width: <span class="number">600</span>,
+    height: <span class="number">600</span>
+  });</code></pre>
 
 
 
 <script>
   
-  var chart = new Cedar({"specification":"../../../cedar/data/templates/pie.json"});
+  var chart = new Cedar({"type":"pie"});
 
   var dataset = {
     "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
@@ -152,7 +156,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -166,9 +170,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

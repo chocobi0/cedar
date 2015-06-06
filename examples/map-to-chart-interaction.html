@@ -113,91 +113,90 @@
 
 
 
-<pre><code class="language-html">
-    require([&quot;cedar&quot;, &quot;esri/map&quot;, &quot;esri/layers/FeatureLayer&quot;, &quot;esri/symbols/SimpleMarkerSymbol&quot;, &quot;esri/symbols/SimpleLineSymbol&quot;,
-    &quot;esri/renderers/SimpleRenderer&quot;,  &quot;esri/renderers/UniqueValueRenderer&quot;, &quot;esri/Color&quot;, &quot;esri/graphic&quot;, &quot;dojo/domReady!&quot;], function(Cedar, Map, FeatureLayer, 
-       SimpleMarkerSymbol, SimpleLineSymbol, SimpleRenderer, UniqueValueRenderer, Color, Graphic) { 
+<pre><code class="language-js">  require([<span class="string">"cedar"</span>, <span class="string">"esri/map"</span>, <span class="string">"esri/layers/FeatureLayer"</span>, <span class="string">"esri/symbols/SimpleMarkerSymbol"</span>, <span class="string">"esri/symbols/SimpleLineSymbol"</span>,
+    <span class="string">"esri/renderers/SimpleRenderer"</span>,  <span class="string">"esri/renderers/UniqueValueRenderer"</span>, <span class="string">"esri/Color"</span>, <span class="string">"esri/graphic"</span>, <span class="string">"dojo/domReady!"</span>], <span class="function"><span class="keyword">function</span><span class="params">(Cedar, Map, FeatureLayer, 
+       SimpleMarkerSymbol, SimpleLineSymbol, SimpleRenderer, UniqueValueRenderer, Color, Graphic)</span> {</span> 
 
-    var defaultSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 11,
-      new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-      new Color([220,220,220]), 0.5),
-      new Color([14,105,175,0.55]));
+    <span class="keyword">var</span> defaultSymbol = <span class="keyword">new</span> SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, <span class="number">11</span>,
+      <span class="keyword">new</span> SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+      <span class="keyword">new</span> Color([<span class="number">220</span>,<span class="number">220</span>,<span class="number">220</span>]), <span class="number">0.5</span>),
+      <span class="keyword">new</span> Color([<span class="number">14</span>,<span class="number">105</span>,<span class="number">175</span>,<span class="number">0.55</span>]));
 
-    var rend = new SimpleRenderer(defaultSymbol);
+    <span class="keyword">var</span> rend = <span class="keyword">new</span> SimpleRenderer(defaultSymbol);
 
-    var featureLayer = new FeatureLayer(&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,{
+    <span class="keyword">var</span> featureLayer = <span class="keyword">new</span> FeatureLayer(<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,{
       mode: FeatureLayer.SNAPSHOT,
-      outFields: [&quot;*&quot;]
+      outFields: [<span class="string">"*"</span>]
     });
 
-    //create esri map
-    var map = new Map(&quot;map&quot;, {
-      center: [-77, 38.9],
-      zoom: 11,
-      basemap: &quot;topo&quot;,
-      smartNavigation: false
+    <span class="comment">//create esri map</span>
+    <span class="keyword">var</span> map = <span class="keyword">new</span> Map(<span class="string">"map"</span>, {
+      center: [-<span class="number">77</span>, <span class="number">38.9</span>],
+      zoom: <span class="number">11</span>,
+      basemap: <span class="string">"topo"</span>,
+      smartNavigation: <span class="literal">false</span>
     });
 
-    map.on(&#39;load&#39;, function() {
+    map.on(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
       map.disableScrollWheelZoom();
     });
 
     featureLayer.setRenderer(rend);
     map.addLayer(featureLayer);
 
-    //create a cedar chart
-    var chart = new Cedar({
-      &quot;specification&quot;:&quot;../data/templates/bar.json&quot;
+    <span class="comment">//create a cedar chart</span>
+    <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({
+      <span class="string">"type"</span>: <span class="string">"bar"</span>
     });
 
     chart.override = {
-      &quot;height&quot;: 400,
-      &quot;marks&quot;: [{&quot;properties&quot;: {
-        &quot;hover&quot;: {&quot;fill&quot;: {&quot;value&quot;: &quot;#1f4c70&quot;}},
-        &quot;update&quot;: {&quot;fill&quot;: {&quot;value&quot;: &quot;#0e69af&quot;}}}}]};
+      <span class="string">"height"</span>: <span class="number">400</span>,
+      <span class="string">"marks"</span>: [{<span class="string">"properties"</span>: {
+        <span class="string">"hover"</span>: {<span class="string">"fill"</span>: {<span class="string">"value"</span>: <span class="string">"#1f4c70"</span>}},
+        <span class="string">"update"</span>: {<span class="string">"fill"</span>: {<span class="string">"value"</span>: <span class="string">"#0e69af"</span>}}}}]};
 
 
-    //create the dataset w/ mappings
-    var dataset = {
-      &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
+    <span class="comment">//create the dataset w/ mappings</span>
+    <span class="keyword">var</span> dataset = {
+      <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
 
-    &quot;query&quot;: {
-      &quot;groupByFieldsForStatistics&quot;: &quot;ZIP_CODE&quot;,
-      &quot;outStatistics&quot;: [{
-        &quot;statisticType&quot;: &quot;sum&quot;, 
-        &quot;onStatisticField&quot;: &quot;TOTAL_STUD&quot;, 
-        &quot;outStatisticFieldName&quot;: &quot;TOTAL_STUD_SUM&quot;
-      }]
+      <span class="string">"query"</span>: {
+        <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"ZIP_CODE"</span>,
+        <span class="string">"outStatistics"</span>: [{
+          <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+          <span class="string">"onStatisticField"</span>: <span class="string">"TOTAL_STUD"</span>, 
+          <span class="string">"outStatisticFieldName"</span>: <span class="string">"TOTAL_STUD_SUM"</span>
+        }]      
       },
-      &quot;mappings&quot;:{
-        &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-        &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD&quot;,&quot;label&quot;:&quot;Total Students&quot;}
+      <span class="string">"mappings"</span>:{
+        <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+        <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
       }
     };
 
-    //assign to the chart
+    <span class="comment">//assign to the chart</span>
     chart.dataset = dataset;
 
-    //show the chart
+    <span class="comment">//show the chart</span>
     chart.show({
-      elementId: &quot;#chart&quot;,
-      renderer: &quot;svg&quot;
+      elementId: <span class="string">"#chart"</span>,
+      renderer: <span class="string">"svg"</span>
     });
 
 
-    //CHART EVENTS
-    chart.on(&#39;mouseover&#39;, onChartHover);
+    <span class="comment">//CHART EVENTS</span>
+    chart.on(<span class="string">'mouseover'</span>, onChartHover);
 
-    function onChartHover(e,d) {
+    <span class="function"><span class="keyword">function</span> <span class="title">onChartHover</span><span class="params">(e,d)</span> {</span>
 
-      //get selected value for attribute in chart marker
-      var selected = d[dataset.mappings.x.field];
+      <span class="comment">//get selected value for attribute in chart marker</span>
+      <span class="keyword">var</span> selected = d[dataset.mappings.x.field];
 
-      //create renderer
-      var renderer = new UniqueValueRenderer(defaultSymbol, dataset.mappings.x.field);
+      <span class="comment">//create renderer</span>
+      <span class="keyword">var</span> renderer = <span class="keyword">new</span> UniqueValueRenderer(defaultSymbol, dataset.mappings.x.field);
 
-      //add symbol selected value
-      renderer.addValue(selected, new SimpleMarkerSymbol().setColor(new Color([14,105,175, 0.5])));
+      <span class="comment">//add symbol selected value</span>
+      renderer.addValue(selected, <span class="keyword">new</span> SimpleMarkerSymbol().setColor(<span class="keyword">new</span> Color([<span class="number">14</span>,<span class="number">105</span>,<span class="number">175</span>, <span class="number">0.5</span>])));
 
       featureLayer.setRenderer(renderer);
       featureLayer.redraw();
@@ -207,33 +206,35 @@
     window.chart = chart;
 
 
-    map.on(&quot;load&quot;, function() {
+    map.on(<span class="string">"load"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
       map.graphics.enableMouseEvents();
-      map.graphics.on(&quot;mouse-out&quot;, onMouseout);
+      map.graphics.on(<span class="string">"mouse-out"</span>, onMouseout);
     });
 
-    function onMouseout(d) {
+    <span class="function"><span class="keyword">function</span> <span class="title">onMouseout</span><span class="params">(d)</span> {</span>
 
       map.graphics.clear();
+
+      <span class="keyword">var</span> val = d.graphic.attributes[<span class="string">"ZIP_CODE"</span>];
       chart.clearSelection({});
 
     }
 
-    //MAP EVENTS
-    featureLayer.on(&#39;mouse-over&#39;, function(d) {
+    <span class="comment">//MAP EVENTS</span>
+    featureLayer.on(<span class="string">'mouse-over'</span>, <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span>
 
-      var highlightSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 11,
-        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-        new Color([255,255,255]), 1.5),
-        new Color([14,105,175,0.8]));
+      <span class="keyword">var</span> highlightSymbol = <span class="keyword">new</span> SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, <span class="number">11</span>,
+        <span class="keyword">new</span> SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+        <span class="keyword">new</span> Color([<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>]), <span class="number">1.5</span>),
+        <span class="keyword">new</span> Color([<span class="number">14</span>,<span class="number">105</span>,<span class="number">175</span>,<span class="number">0.8</span>]));
 
-      var highlightGraphic = new Graphic(d.graphic.geometry,highlightSymbol);
+      <span class="keyword">var</span> highlightGraphic = <span class="keyword">new</span> Graphic(d.graphic.geometry,highlightSymbol);
       highlightGraphic.attributes = d.graphic.attributes;
       map.graphics.add(highlightGraphic);
 
 
-      var val = d.graphic.attributes[&quot;ZIP_CODE&quot;];
-      chart.select({key: &quot;ZIP_CODE&quot;, value: val});
+      <span class="keyword">var</span> val = d.graphic.attributes[<span class="string">"ZIP_CODE"</span>];
+      chart.select({key: <span class="string">"ZIP_CODE"</span>, value: val});
 
     });
 
@@ -277,7 +278,7 @@
     
     //create a cedar chart
     var chart = new Cedar({
-      "specification":"../data/templates/bar.json"
+      "type": "bar"
     });
 
     chart.override = {
@@ -386,7 +387,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -400,9 +401,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

@@ -98,86 +98,87 @@
 
 
 
-<pre><code class="language-html">
-   //create a cedar chart
-  var chart = new Cedar({&quot;specification&quot;:&quot;../data/templates/bar.json&quot;});
-  var style = {
-      &quot;height&quot;: 400,
-      &quot;width&quot;: 850,
-      &quot;marks&quot;: [{&quot;properties&quot;: {
-        &quot;hover&quot;: {&quot;fill&quot;: {&quot;value&quot;: &quot;#c15000&quot;}},
-        &quot;update&quot;: {&quot;fill&quot;: {&quot;value&quot;: &quot;#0079c1&quot;}}}}]};
+<pre><code class="language-js">
+  <span class="comment">//create a cedar chart</span>
+  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>: <span class="string">"bar"</span>});
+  <span class="keyword">var</span> style = {
+      <span class="string">"height"</span>: <span class="number">400</span>,
+      <span class="string">"width"</span>: <span class="number">850</span>,
+      <span class="string">"marks"</span>: [{<span class="string">"properties"</span>: {
+        <span class="string">"hover"</span>: {<span class="string">"fill"</span>: {<span class="string">"value"</span>: <span class="string">"#c15000"</span>}},
+        <span class="string">"update"</span>: {<span class="string">"fill"</span>: {<span class="string">"value"</span>: <span class="string">"#0079c1"</span>}}}}]};
 
   chart.override = style;
 
-  //create the dataset w/ mappings
-  var dataset = {
-    &quot;url&quot;:&quot;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&quot;,
-      &quot;query&quot;: {
-        &quot;groupByFieldsForStatistics&quot;: &quot;ZIP_CODE&quot;,
-        &quot;outStatistics&quot;: [{
-          &quot;statisticType&quot;: &quot;sum&quot;, 
-          &quot;onStatisticField&quot;: &quot;TOTAL_STUD&quot;, 
-          &quot;outStatisticFieldName&quot;: &quot;TOTAL_STUD_SUM&quot;
+  <span class="comment">//create the dataset w/ mappings</span>
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
+      <span class="string">"query"</span>: {
+        <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"ZIP_CODE"</span>,
+        <span class="string">"outStatistics"</span>: [{
+          <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+          <span class="string">"onStatisticField"</span>: <span class="string">"TOTAL_STUD"</span>, 
+          <span class="string">"outStatisticFieldName"</span>: <span class="string">"TOTAL_STUD_SUM"</span>
         }]
       },  
-    &quot;mappings&quot;:{
-      &quot;x&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-      &quot;y&quot;: {&quot;field&quot;:&quot;TOTAL_STUD_SUM&quot;,&quot;label&quot;:&quot;Total Students&quot;}
+    <span class="string">"mappings"</span>:{
+      <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+      <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
     }
   };
-  //assign to the chart
+
+  <span class="comment">//assign to the chart</span>
   chart.dataset = dataset;
 
-  //show the chart
+  <span class="comment">//show the chart</span>
   chart.show({
-    elementId: &quot;#chart&quot;
+    elementId: <span class="string">"#chart"</span>
   });
 
 
-  var map = L.map(&#39;map&#39;).setView([38.9,-77], 11);
+  <span class="keyword">var</span> map = L.map(<span class="string">'map'</span>).setView([<span class="number">38.9</span>,-<span class="number">77</span>], <span class="number">11</span>);
 
-  var geojsonMarkerOptions = {
-    radius: 8,
-    fillColor: style.marks[0].properties.update.fill.value,
-    color: &quot;#000&quot;,
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
+  <span class="keyword">var</span> geojsonMarkerOptions = {
+    radius: <span class="number">8</span>,
+    fillColor: style.marks[<span class="number">0</span>].properties.update.fill.value,
+    color: <span class="string">"#000"</span>,
+    weight: <span class="number">1</span>,
+    opacity: <span class="number">1</span>,
+    fillOpacity: <span class="number">0.8</span>
   };
 
-  L.esri.basemapLayer(&#39;Streets&#39;).addTo(map);
-  var featureLayer = L.esri.featureLayer(&#39;http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5&#39;, {
-   pointToLayer: function (geojson, latlng) {
-      return L.circleMarker(latlng, geojsonMarkerOptions);
+  L.esri.basemapLayer(<span class="string">'Streets'</span>).addTo(map);
+  <span class="keyword">var</span> featureLayer = L.esri.featureLayer(<span class="string">'http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5'</span>, {
+   pointToLayer: <span class="function"><span class="keyword">function</span> <span class="params">(geojson, latlng)</span> {</span>
+      <span class="keyword">return</span> L.circleMarker(latlng, geojsonMarkerOptions);
     },
   });
 
   featureLayer.addTo(map);
 
 
-  //CHART EVENTS
-  chart.on(&#39;mouseover&#39;, onChartHover);
+  <span class="comment">//CHART EVENTS</span>
+  chart.on(<span class="string">'mouseover'</span>, onChartHover);
 
-  function onChartHover(e,d) {
+  <span class="function"><span class="keyword">function</span> <span class="title">onChartHover</span><span class="params">(e,d)</span> {</span>
 
-    //get selected value for attribute in chart marker
-    var selected = d[dataset.mappings.x.field];
+    <span class="comment">//get selected value for attribute in chart marker</span>
+    <span class="keyword">var</span> selected = d[dataset.mappings.x.field];
 
-    var hoverStyle = {
-      radius: 8,
-      fillColor: style.marks[0].properties.hover.fill.value,
-      color: &quot;#000&quot;,
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8
+    <span class="keyword">var</span> hoverStyle = {
+      radius: <span class="number">8</span>,
+      fillColor: style.marks[<span class="number">0</span>].properties.hover.fill.value,
+      color: <span class="string">"#000"</span>,
+      weight: <span class="number">1</span>,
+      opacity: <span class="number">1</span>,
+      fillOpacity: <span class="number">0.8</span>
     };
 
-    featureLayer.setStyle(function(point) {
-      if (point.properties[dataset.mappings.x.field] === selected ) {
-        return hoverStyle;
-      } else {
-        return geojsonMarkerOptions;
+    featureLayer.setStyle(<span class="function"><span class="keyword">function</span><span class="params">(point)</span> {</span>
+      <span class="keyword">if</span> (point.properties[dataset.mappings.x.field] === selected ) {
+        <span class="keyword">return</span> hoverStyle;
+      } <span class="keyword">else</span> {
+        <span class="keyword">return</span> geojsonMarkerOptions;
       }
     });
 
@@ -187,9 +188,8 @@
 
 <script>
   
-
   //create a cedar chart
-  var chart = new Cedar({"specification":"../data/templates/bar.json"});
+  var chart = new Cedar({"type": "bar"});
   var style = {
       "height": 400,
       "width": 850,
@@ -286,7 +286,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -300,9 +300,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

@@ -817,5 +817,3 @@ Cedar._serializeQueryParams = function(params) {
 
   return Cedar;
 }));
-
-//# sourceMappingURL=cedar.js.map

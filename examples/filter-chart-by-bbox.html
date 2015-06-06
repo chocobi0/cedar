@@ -125,36 +125,35 @@
 <div id="chart"></div>
 
 
-<pre><code class="language-html">
-    require([&quot;cedar&quot;, &quot;esri/map&quot;, &quot;esri/layers/FeatureLayer&quot;, &quot;esri/symbols/SimpleMarkerSymbol&quot;, &quot;esri/symbols/SimpleLineSymbol&quot;,
-    &quot;esri/renderers/SimpleRenderer&quot;,  &quot;esri/renderers/UniqueValueRenderer&quot;, &quot;esri/Color&quot;, &quot;dojo/domReady!&quot;], function(Cedar, Map, FeatureLayer, 
-       SimpleMarkerSymbol, SimpleLineSymbol, SimpleRenderer, UniqueValueRenderer, Color) { 
+<pre><code class="language-js">  require([<span class="string">"cedar"</span>, <span class="string">"esri/map"</span>, <span class="string">"esri/layers/FeatureLayer"</span>, <span class="string">"esri/symbols/SimpleMarkerSymbol"</span>, <span class="string">"esri/symbols/SimpleLineSymbol"</span>,
+    <span class="string">"esri/renderers/SimpleRenderer"</span>,  <span class="string">"esri/renderers/UniqueValueRenderer"</span>, <span class="string">"esri/Color"</span>, <span class="string">"dojo/domReady!"</span>], <span class="function"><span class="keyword">function</span><span class="params">(Cedar, Map, FeatureLayer, 
+       SimpleMarkerSymbol, SimpleLineSymbol, SimpleRenderer, UniqueValueRenderer, Color)</span> {</span> 
 
-    var defaultSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 9,
-      new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-      new Color([198,12,70,1]), 1),
-      new Color([248,187,37,0.9]));
+    <span class="keyword">var</span> defaultSymbol = <span class="keyword">new</span> SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, <span class="number">9</span>,
+      <span class="keyword">new</span> SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+      <span class="keyword">new</span> Color([<span class="number">198</span>,<span class="number">12</span>,<span class="number">70</span>,<span class="number">1</span>]), <span class="number">1</span>),
+      <span class="keyword">new</span> Color([<span class="number">248</span>,<span class="number">187</span>,<span class="number">37</span>,<span class="number">0.9</span>]));
 
-    var rend = new SimpleRenderer(defaultSymbol);
+    <span class="keyword">var</span> rend = <span class="keyword">new</span> SimpleRenderer(defaultSymbol);
 
-    var featureLayer = new FeatureLayer(&quot;http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It&#39;s_a_Tornado_Map/FeatureServer/0&quot;,{
+    <span class="keyword">var</span> featureLayer = <span class="keyword">new</span> FeatureLayer(<span class="string">"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0"</span>,{
       mode: FeatureLayer.SNAPSHOT,
-      outFields: [&quot;*&quot;]
+      outFields: [<span class="string">"*"</span>]
     });
 
-    //create esri map
-    var map = new Map(&quot;map&quot;, {
-      center: [-99, 38.9],
-      zoom: 4,
-      basemap: &quot;topo&quot;,
-      smartNavigation: false
+    <span class="comment">//create esri map</span>
+    <span class="keyword">var</span> map = <span class="keyword">new</span> Map(<span class="string">"map"</span>, {
+      center: [-<span class="number">99</span>, <span class="number">38.9</span>],
+      zoom: <span class="number">4</span>,
+      basemap: <span class="string">"topo"</span>,
+      smartNavigation: <span class="literal">false</span>
     });
 
-    map.on(&#39;load&#39;, function() {
+    map.on(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
       map.disableScrollWheelZoom();
     });
 
-    map.on(&#39;extent-change&#39;, function() {
+    map.on(<span class="string">'extent-change'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
       onExtentChanged();
     });
 
@@ -164,36 +163,43 @@
     featureLayer.setRenderer(rend);
     map.addLayer(featureLayer);
 
-    var dataset = {
-      &quot;url&quot;:&quot;http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It&#39;s_a_Tornado_Map/FeatureServer/0&quot;,
-      &quot;query&quot;: {},
-      &quot;mappings&quot;:{
-        &quot;x&quot;: {&quot;field&quot;:&quot;state&quot;,&quot;label&quot;:&quot;State&quot;},
-        &quot;y&quot;: {&quot;field&quot;:&quot;injuries&quot;,&quot;label&quot;:&quot;Injuries&quot;}
+    <span class="keyword">var</span> dataset = {
+      <span class="string">"url"</span>:<span class="string">"http://services.arcgis.com/bkrWlSKcjUDFDtgw/arcgis/rest/services/It's_a_Tornado_Map/FeatureServer/0"</span>,
+      <span class="string">"query"</span>: {
+        <span class="string">"groupByFieldsForStatistics"</span>: <span class="string">"state"</span>,
+        <span class="string">"outStatistics"</span>: [{
+          <span class="string">"statisticType"</span>: <span class="string">"sum"</span>, 
+          <span class="string">"onStatisticField"</span>: <span class="string">"injuries"</span>, 
+          <span class="string">"outStatisticFieldName"</span>: <span class="string">"injuries_SUM"</span>
+        }]
+      },  
+      <span class="string">"mappings"</span>:{
+        <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"state"</span>,<span class="string">"label"</span>:<span class="string">"State"</span>},
+        <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"injuries_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Injuries"</span>}
       }
     };
 
-    var chart = new Cedar({&quot;specification&quot;:&quot;../data/templates/bar.json&quot;, &quot;dataset&quot;: dataset});
+    <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>: <span class="string">"bar"</span>, <span class="string">"dataset"</span>: dataset});
 
     chart.override = {
-      &quot;height&quot;: 300,
-      &quot;marks&quot;: [{&quot;properties&quot;: {
-          &quot;hover&quot;: {&quot;fill&quot;: {&quot;value&quot;: &quot;#f8bb25&quot;}},
-          &quot;update&quot;: {&quot;fill&quot;: {&quot;value&quot;: &quot;#c60c46&quot;}}
+      <span class="string">"height"</span>: <span class="number">300</span>,
+      <span class="string">"marks"</span>: [{<span class="string">"properties"</span>: {
+          <span class="string">"hover"</span>: {<span class="string">"fill"</span>: {<span class="string">"value"</span>: <span class="string">"#f8bb25"</span>}},
+          <span class="string">"update"</span>: {<span class="string">"fill"</span>: {<span class="string">"value"</span>: <span class="string">"#c60c46"</span>}}
         }
       }]
     };
 
-    //create and render a chart
+    <span class="comment">//create and render a chart</span>
     chart.show({
-      &#39;elementId&#39;: &#39;#chart&#39;
+      <span class="string">'elementId'</span>: <span class="string">'#chart'</span>
     });
     window.chart = chart;
 
-    function onExtentChanged(){
-      var extent = map.geographicExtent.toJson();
-      //WESN order
-      chart.dataset.query.bbox = extent.xmin + &#39;,&#39; + extent.xmax + &#39;,&#39; + extent.ymin + &#39;,&#39; + extent.ymax;
+    <span class="function"><span class="keyword">function</span> <span class="title">onExtentChanged</span><span class="params">()</span>{</span>
+      <span class="keyword">var</span> extent = map.geographicExtent.toJson();
+      <span class="comment">//WESN order</span>
+      chart.dataset.query.bbox = extent.xmin + <span class="string">','</span> + extent.xmax + <span class="string">','</span> + extent.ymin + <span class="string">','</span> + extent.ymax;
       chart.update();
     }
 
@@ -257,7 +263,7 @@
       }
     };
 
-    var chart = new Cedar({"specification":"../../../cedar//data/templates/bar.json", "dataset": dataset});
+    var chart = new Cedar({"type": "bar", "dataset": dataset});
 
     chart.override = {
       "height": 300,
@@ -297,7 +303,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -311,9 +317,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

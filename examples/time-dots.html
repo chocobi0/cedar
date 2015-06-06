@@ -85,9 +85,29 @@
 
 <div id="chart"></div>
 
+<pre><code class="language-js">  <span class="comment">// NOTE: this is not one of the standard chart types</span>
+  <span class="comment">// so we pass a url to the specification JSON</span>
+  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/time-dots.json"</span>});
+
+  <span class="keyword">var</span> dataset = {
+    <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/FEEDS/CDW_Feeds/MapServer/8"</span>,
+    <span class="string">"mappings"</span>:{
+      <span class="string">"time"</span>:   {<span class="string">"field"</span>:<span class="string">"REPORTDATETIME"</span>},
+      <span class="string">"aspect"</span>: {<span class="string">"field"</span>:<span class="string">"OFFENSE"</span>},
+      <span class="string">"facet"</span>:  {<span class="string">"field"</span>:<span class="string">"WARD"</span>},
+      <span class="string">"color"</span>:  {<span class="string">"field"</span>:<span class="string">"SHIFT"</span>}
+    }
+  };
+  chart.dataset = dataset;
+
+  chart.show({
+    <span class="string">"elementId"</span>: <span class="string">"#chart"</span>,
+  });</code></pre>
+
 
 <script>
-  
+  // NOTE: this is not one of the standard chart types
+  // so we pass a url to the specification JSON
   var chart = new Cedar({"specification":"../../../cedar/data/templates/time-dots.json"});
 
   var dataset = {
@@ -103,7 +123,7 @@
 
   chart.show({
     "elementId": "#chart",
-  });  
+  });
 
 </script>
   <div class="wrap">
@@ -118,7 +138,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -132,9 +152,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

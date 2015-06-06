@@ -21,14 +21,14 @@
   <![endif]-->
 
   <!-- stylesheet -->
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../../../cedar/css/style.css">
 
   <!-- Cedar and dependencies (d3, vega) -->
   <!-- NOTE: the pie chart examle does not work w/ latest vega (v1.5+), so here we are pulling in an oldder version (v1.4.3) -->
   
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"></script>
-    <script type="text/javascript" src="../js/cedar.js"></script>
+    <script type="text/javascript" src="../../../cedar/js/cedar.js"></script>
   
   <!-- NOTE: underscore is used by a few examples, but is not needed by Cedar -->
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
@@ -55,14 +55,14 @@
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../">cedar.js</a>
+      <a class="navbar-brand" href="../../../cedar/">cedar.js</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         
-        <li><a href="../api/">API Documentation</a></li>
-        <li><a href="../examples/">Examples</a></li>
+        <li><a href="../../../cedar/api/">API Documentation</a></li>
+        <li><a href="../../../cedar/examples/">Examples</a></li>
         <li><a href="https://github.com/esri/cedar">Github</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -82,14 +82,15 @@
 
 <h1>Bar Chart</h1>
 
-<h3>Specification and Data from URL</h3>
+<h3>Data from URL</h3>
 
 <div id="tooltip-url" class="cedar-tooltip" style="display: none"></div>
 <div id="chart-url"></div>
 
 <pre><code class="language-javascript">&lt;script&gt;
-  <span class="comment">//create a cedar chart - passing a url to the spec</span>
-  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../data/templates/bar.json"</span>});
+  <span class="comment">//create a cedar chart using the known 'bar' type</span>
+  <span class="comment">// this is the same as passing {"specification": "path/to/cedar/charts/bar.json"}</span>
+  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>: <span class="string">"bar"</span>});
   <span class="comment">//create the dataset w/ mappings</span>
   <span class="keyword">var</span> dataset = {
     <span class="string">"url"</span>:<span class="string">"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5"</span>,
@@ -145,8 +146,9 @@
 
 
 <script>
-  //create a cedar chart - passing a url to the spec
-  var chart = new Cedar({"specification":"../data/templates/bar.json"});
+  //create a cedar chart using the known 'bar' type
+  // this is the same as passing {"specification": "path/to/cedar/charts/bar.json"}
+  var chart = new Cedar({"type": "bar"});
   //create the dataset w/ mappings
   var dataset = {
     "url":"http://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Education_WebMercator/MapServer/5",
@@ -208,7 +210,7 @@
 <pre><code class="language-javascript">&lt;script&gt;
   <span class="keyword">var</span> features = {<span class="string">"features"</span>:[{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20005</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">327</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20024</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">517</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20017</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">597</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20015</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">707</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20037</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">760</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20018</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1052</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20012</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1184</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20007</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1584</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20008</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1625</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20003</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1869</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20009</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">1945</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20001</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">2164</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20010</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">2282</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20019</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">3278</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20011</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">3817</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20020</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">3901</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20032</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">4360</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20016</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">4681</span>}},{<span class="string">"attributes"</span>:{<span class="string">"ZIP_CODE"</span>:<span class="number">20002</span>,<span class="string">"TOTAL_STUD_SUM"</span>:<span class="number">5590</span>}}]};
 
-  <span class="keyword">var</span> chart2 = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../data/templates/bar.json"</span>});
+  <span class="keyword">var</span> chart2 = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>: <span class="string">"bar"</span>});
 
   <span class="keyword">var</span> dataset2 = {
     <span class="string">"data"</span>: features,
@@ -254,7 +256,7 @@
 <script>
   var features = {"features":[{"attributes":{"ZIP_CODE":20005,"TOTAL_STUD_SUM":327}},{"attributes":{"ZIP_CODE":20024,"TOTAL_STUD_SUM":517}},{"attributes":{"ZIP_CODE":20017,"TOTAL_STUD_SUM":597}},{"attributes":{"ZIP_CODE":20015,"TOTAL_STUD_SUM":707}},{"attributes":{"ZIP_CODE":20037,"TOTAL_STUD_SUM":760}},{"attributes":{"ZIP_CODE":20018,"TOTAL_STUD_SUM":1052}},{"attributes":{"ZIP_CODE":20012,"TOTAL_STUD_SUM":1184}},{"attributes":{"ZIP_CODE":20007,"TOTAL_STUD_SUM":1584}},{"attributes":{"ZIP_CODE":20008,"TOTAL_STUD_SUM":1625}},{"attributes":{"ZIP_CODE":20003,"TOTAL_STUD_SUM":1869}},{"attributes":{"ZIP_CODE":20009,"TOTAL_STUD_SUM":1945}},{"attributes":{"ZIP_CODE":20001,"TOTAL_STUD_SUM":2164}},{"attributes":{"ZIP_CODE":20010,"TOTAL_STUD_SUM":2282}},{"attributes":{"ZIP_CODE":20019,"TOTAL_STUD_SUM":3278}},{"attributes":{"ZIP_CODE":20011,"TOTAL_STUD_SUM":3817}},{"attributes":{"ZIP_CODE":20020,"TOTAL_STUD_SUM":3901}},{"attributes":{"ZIP_CODE":20032,"TOTAL_STUD_SUM":4360}},{"attributes":{"ZIP_CODE":20016,"TOTAL_STUD_SUM":4681}},{"attributes":{"ZIP_CODE":20002,"TOTAL_STUD_SUM":5590}}]};
 
-  var chart2 = new Cedar({"specification":"../data/templates/bar.json"});
+  var chart2 = new Cedar({"type": "bar"});
   
   var dataset2 = {
     "data": features,
@@ -298,7 +300,7 @@
 
 
   <div class="wrap">
-    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/bar-spec-url.hbs">Edit this sample on GitHub</a></p>
+    <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/bar.hbs">Edit this sample on GitHub</a></p>
   </div>
 </div>
 
@@ -309,31 +311,31 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../examples/bar-spec-url.html">Bar Chart</a></li>
-      <li><a href="../examples/horizontal.html">Horizontal Chart</a></li>
-      <li><a href="../examples/scatter-def-url.html">Scatterplot</a></li>
-      <li><a href="../examples/bubble.html">Bubble Scatterplot</a></li>
-      <li><a href="../examples/simple-pie.html">Pie Chart</a></li>
-      <li><a href="../examples/multiple.html">Multiple Charts</a></li>
-      <li><a href="../examples/time.html">Timeline</a></li>
-      <li><a href="../examples/time-dots.html">Time facets</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
+      <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
+      <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
+      <li><a href="../../../cedar/examples/simple-pie.html">Pie Chart</a></li>
+      <li><a href="../../../cedar/examples/multiple.html">Multiple Charts</a></li>
+      <li><a href="../../../cedar/examples/time.html">Timeline</a></li>
+      <li><a href="../../../cedar/examples/time-dots.html">Time facets</a></li>
     </ul>
   </nav>
 
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../examples/bar-spec-defaults.html">Defaults</a></li>
-      <li><a href="../examples/style-overrides.html">Style Overrides</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>
 
 <!--  <h5>Using Definitions</h5>
   <nav>
     <ul>
-      <li><a href="../examples/scatter-def-url.html">Load from URL</a></li>
+      <li><a href="../../../cedar/examples/scatter-def-url.html">Load from URL</a></li>
       <li>In-lined</li>
     </ul>
   </nav>
@@ -341,28 +343,28 @@
   <h5>Events</h5>
   <nav>
     <ul>
-      <li><a href="../examples/scatter-events.html">Scatter Plot Events</a></li>
-      <li><a href="../examples/drill-down.html">Drill Down</a></li>
+      <li><a href="../../../cedar/examples/scatter-events.html">Scatter Plot Events</a></li>
+      <li><a href="../../../cedar/examples/drill-down.html">Drill Down</a></li>
     </ul>
   </nav>
   <h5>Map Integration</h5>
   <nav>
     <ul>
-      <li><a href="../examples/bar-map-integration.html">With JS API Map</a></li>
-      <li><a href="../examples/bar-map-leaflet-integration.html">With Leaflet Map</a></li>
-      <li><a href="../examples/filter-chart-by-map-extent.html">Filter by Geometry</a></li>
-      <li><a href="../examples/filter-chart-by-bbox.html">Filter by BBOX</a></li>
-      <li><a href="../examples/map-to-chart-interaction.html">Map to Chart Interaction</a></li>
+      <li><a href="../../../cedar/examples/bar-map-integration.html">With JS API Map</a></li>
+      <li><a href="../../../cedar/examples/bar-map-leaflet-integration.html">With Leaflet Map</a></li>
+      <li><a href="../../../cedar/examples/filter-chart-by-map-extent.html">Filter by Geometry</a></li>
+      <li><a href="../../../cedar/examples/filter-chart-by-bbox.html">Filter by BBOX</a></li>
+      <li><a href="../../../cedar/examples/map-to-chart-interaction.html">Map to Chart Interaction</a></li>
     </ul>
   </nav>
 
   <h5>Additional Examples</h5>
   <nav>
     <ul>
-      <li><a href="../examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
-      <li><a href="../examples/inlined-data.html">Local Inline Data</a></li>
-      <li><a href="../examples/sizes.html">Chart Size and Resizing</a></li>
-      <li><a href="../examples/responsive-example.html">Responsive Charts</a></li>
+      <li><a href="../../../cedar/examples/complex-map-multiple-chart.html">Map and Multiple Charts</a></li>
+      <li><a href="../../../cedar/examples/inlined-data.html">Local Inline Data</a></li>
+      <li><a href="../../../cedar/examples/sizes.html">Chart Size and Resizing</a></li>
+      <li><a href="../../../cedar/examples/responsive-example.html">Responsive Charts</a></li>
     </ul>
   </nav>
 
@@ -378,6 +380,6 @@
 </div>
 
   </div>
-  <!-- <script src="../js/script.js"></script>-->
+  <!-- <script src="../../../cedar/js/script.js"></script>-->
   </body>
 </html>

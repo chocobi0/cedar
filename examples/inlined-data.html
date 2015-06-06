@@ -86,29 +86,30 @@
 <div id="chart"></div>
 
 
-<pre><code class="language-html">  var chart = new Cedar({&quot;specification&quot;:&quot;../../../cedar/data/templates/bar.json&quot;});
-  //fetch data from a json file
-  var data = Cedar.getJson(&#39;../../../cedar/data/feature-collection-data.json&#39;, function(err, data){
-    if(!err){
+<pre><code class="language-js">  <span class="keyword">var</span> chart = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>:<span class="string">"bar"</span>});
 
-      var dataset = {
-        &quot;data&quot;: data,
-        &quot;mappings&quot;:{
-          &quot;group&quot;: {&quot;field&quot;:&quot;ZIP_CODE&quot;,&quot;label&quot;:&quot;ZIP Code&quot;},
-          &quot;count&quot;: {&quot;field&quot;:&quot;TOTAL_STUD_SUM&quot;,&quot;label&quot;:&quot;Total Students&quot;}
+  <span class="keyword">var</span> data = Cedar.getJson(<span class="string">'../../../cedar/data/feature-collection-data.json'</span>, <span class="function"><span class="keyword">function</span><span class="params">(err, data)</span>{</span>
+    <span class="keyword">if</span>(!err){
+
+      <span class="keyword">var</span> dataset = {
+        <span class="string">"data"</span>: data,
+        <span class="string">"mappings"</span>:{
+          <span class="string">"x"</span>: {<span class="string">"field"</span>:<span class="string">"ZIP_CODE"</span>,<span class="string">"label"</span>:<span class="string">"ZIP Code"</span>},
+          <span class="string">"y"</span>: {<span class="string">"field"</span>:<span class="string">"TOTAL_STUD_SUM"</span>,<span class="string">"label"</span>:<span class="string">"Total Students"</span>}
         }
       };
-      //assign to the chart
+      <span class="comment">//assign to the chart</span>
       chart.dataset = dataset;
 
-      //show the chart
+      <span class="comment">//show the chart</span>
       chart.show({
-        elementId: &quot;#chart&quot;
+        elementId: <span class="string">"#chart"</span>
       });
 
-    }else{
-      console.error(&#39;Error loading data from file&#39;);
-    }</code></pre>
+    }<span class="keyword">else</span>{
+      console.error(<span class="string">'Error loading data from file'</span>);
+    }
+  });</code></pre>
 <h3 id="expected-format">Expected Format</h3>
 <pre><code>{
   ...other properties...
@@ -131,8 +132,7 @@
 
 
 <script>
-  //create a cedar chart - passing a url to the spec
-  var chart = new Cedar({"specification":"../../../cedar/data/templates/bar.json"});
+  var chart = new Cedar({"type":"bar"});
 
   var data = Cedar.getJson('../../../cedar/data/feature-collection-data.json', function(err, data){
     if(!err){
@@ -156,9 +156,6 @@
       console.error('Error loading data from file');
     }
   });
-
-
-
 </script>
   <div class="wrap">
     <p><a href="http://github.com/esri/cedar/edit/master/site/source/pages/examples/inlined-data.hbs">Edit this sample on GitHub</a></p>
@@ -172,7 +169,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -186,9 +183,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>

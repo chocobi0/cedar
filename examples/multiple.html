@@ -110,7 +110,7 @@
     }
   };
 
-  <span class="keyword">var</span> chart1 = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/bar.json"</span>, <span class="string">"dataset"</span>: dataset});
+  <span class="keyword">var</span> chart1 = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>:<span class="string">"bar"</span>, <span class="string">"dataset"</span>: dataset});
 
   chart1.show({
     elementId: <span class="string">"#chart1"</span>,
@@ -118,7 +118,7 @@
 
   dataset.mappings.radius = <span class="number">180</span>;
 
-  <span class="keyword">var</span> chart2 = <span class="keyword">new</span> Cedar({<span class="string">"specification"</span>:<span class="string">"../../../cedar/data/templates/pie.json"</span>, <span class="string">"dataset"</span>: dataset});
+  <span class="keyword">var</span> chart2 = <span class="keyword">new</span> Cedar({<span class="string">"type"</span>:<span class="string">"pie"</span>, <span class="string">"dataset"</span>: dataset});
 
   chart2.show({
     elementId: <span class="string">"#chart2"</span>,
@@ -147,7 +147,7 @@
     }
   };
 
-  var chart1 = new Cedar({"specification":"../../../cedar/data/templates/bar.json", "dataset": dataset});
+  var chart1 = new Cedar({"type":"bar", "dataset": dataset});
 
   chart1.show({
     elementId: "#chart1",
@@ -155,7 +155,7 @@
 
   dataset.mappings.radius = 180;
 
-  var chart2 = new Cedar({"specification":"../../../cedar/data/templates/pie.json", "dataset": dataset});
+  var chart2 = new Cedar({"type":"pie", "dataset": dataset});
 
   chart2.show({
     elementId: "#chart2",
@@ -176,7 +176,7 @@
   <h5>Chart Types</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Bar Chart</a></li>
+      <li><a href="../../../cedar/examples/bar.html">Bar Chart</a></li>
       <li><a href="../../../cedar/examples/horizontal.html">Horizontal Chart</a></li>
       <li><a href="../../../cedar/examples/scatter-def-url.html">Scatterplot</a></li>
       <li><a href="../../../cedar/examples/bubble.html">Bubble Scatterplot</a></li>
@@ -190,9 +190,9 @@
   <h5>Using Specifications</h5>
   <nav>
     <ul>
-      <li><a href="../../../cedar/examples/bar-spec-url.html">Specification URL</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-inlined.html">Inline Specification</a></li>
-      <li><a href="../../../cedar/examples/bar-spec-defaults.html">Defaults</a></li>
+      <li><a href="../../../cedar/examples/spec-url.html">Specification URL</a></li>
+      <li><a href="../../../cedar/examples/spec-inlined.html">Inline Specification</a></li>
+      <li><a href="../../../cedar/examples/spec-defaults.html">Defaults</a></li>
       <li><a href="../../../cedar/examples/style-overrides.html">Style Overrides</a></li>
     </ul>
   </nav>
