@@ -362,12 +362,8 @@ Cedar.prototype._renderSpec = function(spec){
         renderer: self._renderer
       });
 
-      
-      var width = self.width || parseInt(d3.select(self._elementId).style('width')) || 500;
-      var height = self.height || parseInt(d3.select(self._elementId).style('height')) || 500;
-
-      //render into the element
-      self._view.width(width).height(height).update(); 
+      // draw the chart
+      self._draw();
 
       //attach event proxies
       self._attach(self._view);
@@ -381,6 +377,27 @@ Cedar.prototype._renderSpec = function(spec){
   catch(ex){
     throw(ex);
   }
+};
+
+/**
+ * redraw the chart
+ */
+Cedar.prototype.redraw = function() {
+  if (!this._view) {
+    return;
+  }
+  this._draw();
+};
+
+/**
+ * draw the chart
+ */
+Cedar.prototype._draw = function() {
+  var width = this.width || parseInt(d3.select(this._elementId).style('width')) || 500;
+  var height = this.height || parseInt(d3.select(this._elementId).style('height')) || 500;
+
+  //render into the element
+  this._view.width(width).height(height).update(); 
 };
 
 /**
